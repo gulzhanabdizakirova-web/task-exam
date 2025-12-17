@@ -1,610 +1,1143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SET B (1–30) — Pink Menu (No Popups)</title>
-  <style>
-    :root{
-      --pink:#ff4fa3;
-      --pink2:#ff78be;
-      --bg:#fff3fa;
-      --card:#ffffff;
-      --text:#1e1e1e;
-      --muted:#6b6b6b;
-      --line:#ffd0e6;
-    }
-    body{
-      margin:0; font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg), #ffffff);
-      color:var(--text);
-    }
-    .wrap{ max-width: 980px; margin: 18px auto; padding: 16px; }
-    .top{
-      background: linear-gradient(135deg, var(--pink), var(--pink2));
-      color:#fff; border-radius:18px; padding:18px;
-      box-shadow: 0 10px 25px rgba(255,79,163,.25);
-    }
-    .top h1{ margin:0 0 6px 0; font-size:22px; }
-    .top p{ margin:0; opacity:.95; }
-    .panel{
-      margin-top:14px;
-      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
-    }
-    select, input{
-      padding:12px 12px; border-radius:14px;
-      border:1px solid var(--line);
-      outline:none; background:#fff;
-      min-width:240px;
-    }
-    button{
-      padding:12px 14px; border-radius:14px;
-      border:none; cursor:pointer; font-weight:700;
-      background:#1e1e1e; color:#fff;
-    }
-    button:hover{ opacity:.92; }
-    .ghost{
-      background: transparent; color:#fff; border:1px solid rgba(255,255,255,.7);
-    }
-    .pinkBtn{
-      background: var(--pink);
-      color:#fff;
-    }
-    .card{
-      margin-top:16px;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px;
-      box-shadow: 0 6px 18px rgba(0,0,0,.06);
-    }
-    .title{
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; align-items:center;
-    }
-    .badge{
-      padding:6px 10px; border-radius:999px;
-      background: #ffe0f0; border:1px solid var(--line);
-      color:#b1005e; font-weight:700; font-size:12px;
-    }
-    .muted{ color:var(--muted); font-size:13px; margin-top:6px; }
-    .row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px; }
-    .out{
-      margin-top:12px;
-      padding:12px; border-radius:14px;
-      background:#fff0f9;
-      border:1px dashed #ff9cd0;
-      white-space: pre-wrap;
-      min-height: 44px;
-    }
-    .small{ font-size:12px; color:var(--muted); }
-    hr{ border:none; border-top:1px solid var(--line); margin:14px 0; }
-    .hide{ display:none; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SET B — Tasks 1–30</title>
+<style>
+  :root{
+    --pink:#ff4fa3;
+    --pink2:#ff7bbf;
+    --bg1:#ffe6f2;
+    --bg2:#ffffff;
+    --card:#ffffff;
+    --text:#1e1e1e;
+    --muted:#666;
+    --line:#f0d0e6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(180deg,var(--bg1),var(--bg2));
+    padding: 34px 14px 60px;
+    color: var(--text);
+  }
+  h1{
+    text-align:center;
+    margin: 0 0 14px;
+    color:#2a5bd7;
+    letter-spacing:.3px;
+  }
+  .wrap{max-width:980px;margin:0 auto}
+  .panel{
+    background: linear-gradient(135deg,var(--pink),var(--pink2));
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    color:#fff;
+  }
+  .row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top: 10px;
+  }
+  select, input, button, textarea{
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 15px;
+    outline: none;
+  }
+  select{min-width: 240px}
+  button{
+    cursor:pointer;
+    font-weight: 700;
+  }
+  .ghost{
+    background: rgba(255,255,255,.18);
+    color:#fff;
+    border: 1px solid rgba(255,255,255,.35);
+  }
+  .ghost:hover{opacity:.95}
+  .card{
+    margin-top: 14px;
+    background: var(--card);
+    border-radius: 16px;
+    padding: 16px;
+    color: var(--text);
+  }
+  .meta{
+    color: rgba(255,255,255,.92);
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .taskTitle{
+    font-size: 18px;
+    margin: 0 0 10px;
+  }
+  .desc{
+    margin: 0 0 12px;
+    color: #333;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  @media (max-width: 720px){
+    .grid{grid-template-columns: 1fr}
+  }
+  .field label{
+    display:block;
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 6px;
+  }
+  .field input, .field textarea, .field select{
+    width:100%;
+    border: 1px solid #eee;
+    background:#fff;
+  }
+  textarea{min-height: 90px; resize: vertical}
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top: 12px;
+  }
+  .run{
+    background: var(--pink);
+    color:#fff;
+  }
+  .run:hover{opacity:.95}
+  .out{
+    margin-top: 12px;
+    border-top: 1px solid var(--line);
+    padding-top: 12px;
+  }
+  .out pre{
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    background: #fff7fb;
+    border: 1px solid #ffd0e6;
+    padding: 12px;
+    border-radius: 12px;
+  }
+  .hint{
+    font-size: 12px;
+    color: #555;
+    margin-top: 6px;
+  }
+  table{
+    width:100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  th, td{
+    border: 1px solid #eee;
+    padding: 10px;
+    text-align:left;
+    font-size: 14px;
+  }
+  th{background:#fff3f9}
+  .badge{
+    display:inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #ffd0e6;
+    background:#fff3f9;
+    font-size:12px;
+    color:#a01355;
+    margin-left: 8px;
+  }
+  .timerBox{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-top: 10px;
+  }
+  .timerDisplay{
+    font-size: 28px;
+    font-weight: 800;
+    padding: 10px 14px;
+    border: 1px solid #ffd0e6;
+    background:#fff7fb;
+    border-radius: 14px;
+    min-width: 160px;
+    text-align:center;
+  }
+</style>
 </head>
+
 <body>
   <div class="wrap">
+    <h1>SET B — JavaScript Tasks (1–30)</h1>
 
-    <!-- MENU HEADER -->
-    <div id="menuHeader" class="top">
-      <h1>SET B (1–30) — Pink Menu (NO Popups)</h1>
-      <p>Select task number → fill inputs → Run → output.</p>
-
-      <div class="panel">
-        <select id="taskSelect">
-          <option value="">Choose task (1–30)</option>
-        </select>
-
-        <button class="ghost" onclick="openTask()">Open</button>
-        <button class="ghost" onclick="resetAll()">Reset</button>
-      </div>
-
-      <div class="small" style="margin-top:10px;opacity:.9">
-        ✅ Added: Back to Menu / Next / Previous buttons
-      </div>
-    </div>
-
-    <!-- TASK CARD -->
-    <div id="taskCard" class="card hide">
-      <div class="title">
+    <div class="panel">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
         <div>
-          <div id="taskHeading" style="font-size:18px;font-weight:800;">Task</div>
-          <div id="taskDesc" class="muted"></div>
+          <div style="font-size:18px;font-weight:800">Choose Task (1–30)</div>
+          <div class="meta">Select a task → it opens below → Run to see the answer.</div>
         </div>
-        <div id="taskBadge" class="badge">#</div>
+        <div class="row" style="margin:0">
+          <select id="taskSelect">
+            <option value="">Select task…</option>
+          </select>
+          <button class="ghost" id="btnReset">Reset</button>
+        </div>
       </div>
 
-      <hr/>
-
-      <!-- navigation buttons -->
-      <div class="row">
-        <button class="pinkBtn" onclick="backToMenu()">⬅ Back to Menu</button>
-        <button onclick="prevTask()">⬅ Previous</button>
-        <button onclick="nextTask()">Next ➡</button>
-      </div>
-
-      <div id="inputsArea" class="row"></div>
-
-      <div class="row" id="buttonsArea">
-        <button onclick="runTask()">Run</button>
-      </div>
-
-      <div id="output" class="out">Output will appear here.</div>
+      <div id="taskCard" class="card" style="display:none"></div>
     </div>
-
   </div>
 
 <script>
-  const $ = (id) => document.getElementById(id);
+/* ========= Helpers ========= */
+const $ = (sel) => document.querySelector(sel);
+const taskCard = $("#taskCard");
+const taskSelect = $("#taskSelect");
 
-  // Fill dropdown 1..30
-  for(let i=1;i<=30;i++){
-    const opt=document.createElement("option");
-    opt.value=i; opt.textContent=Task ${i};
-    $("taskSelect").appendChild(opt);
-  }
+function esc(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;");
+}
 
-  // Shared state
-  let savedArray = [];
+function parseCSV(str){
+  // split by comma, trim
+  return String(str ?? "")
+    .split(",")
+    .map(x => x.trim())
+    .filter(x => x.length>0);
+}
+function parseNums(str){
+  const arr = parseCSV(str).map(Number).filter(n => Number.isFinite(n));
+  return arr;
+}
+function setOut(text){
+  const out = taskCard.querySelector("[data-out]");
+  out.innerHTML = <pre>${esc(text)}</pre>;
+}
+function getVal(id){
+  const el = taskCard.querySelector(#${id});
+  return el ? el.value : "";
+}
 
-  // Timer state for task 29
-  let timerId = null;
-  let timerT = 0;
-  let timerInitial = 0;
+/* ========= Global state for some tasks ========= */
+let signupRows = []; // for task 25/26
+let personObj = null; // for task 27/28
+let timer = { id:null, remaining:0, running:false }; // for task 29
 
-  const TASKS = {
-    1:{ title:"Reverse words in a sentence",
-        desc:"Input a sentence. Output = words reversed.",
-        inputs:[{id:"t1", ph:"e.g. Hello World JS"}],
-        run:()=> {
-          const s=val("t1").trim();
-          return s? s.split(/\s+/).reverse().join(" ") : "Enter a sentence.";
+/* ========= Task definitions ========= */
+const tasks = {
+  1: {
+    title: "Reverse words in a sentence",
+    desc: "Enter a sentence → it will reverse the word order.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Sentence</label>
+          <input id="t1_sentence" placeholder="e.g., I love JavaScript so much" />
+        </div>
+        <div class="field">
+          <label>Result</label>
+          <input id="t1_result" placeholder="Output will show below" disabled />
+        </div>
+      </div>
+      <div class="actions">
+        <button class="run" data-run="t1">Run</button>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const s = getVal("t1_sentence").trim();
+      const words = s.split(/\s+/).filter(Boolean);
+      const res = words.reverse().join(" ");
+      taskCard.querySelector("#t1_result").value = res;
+      setOut(res || "Empty input.");
+    }
+  },
+
+  2: {
+    title: "Extract first and last character from a string",
+    desc: "Enter a string → get first and last characters.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>String</label>
+          <input id="t2_str" placeholder="e.g., hello" />
+        </div>
+        <div class="field">
+          <label>Output</label>
+          <input id="t2_out" disabled placeholder="first + last" />
+        </div>
+      </div>
+      <div class="actions"><button class="run" data-run="t2">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const s = getVal("t2_str");
+      if (!s) return setOut("Empty string.");
+      const first = s[0];
+      const last = s[s.length-1];
+      const res = First: ${first} | Last: ${last};
+      taskCard.querySelector("#t2_out").value = ${first}${last};
+      setOut(res);
+    }
+  },
+
+  3: {
+    title: "Find longest word from sentence",
+    desc: "Enter a sentence → find the longest word.",
+    ui: () => `
+      <div class="field">
+        <label>Sentence</label>
+        <input id="t3_sentence" placeholder="e.g., JavaScript is incredibly powerful" />
+      </div>
+      <div class="actions"><button class="run" data-run="t3">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const s = getVal("t3_sentence").trim();
+      const words = s.match(/[A-Za-z0-9']+/g) || [];
+      let best = "";
+      for (const w of words){
+        if (w.length > best.length) best = w;
+      }
+      setOut(best ? Longest word: ${best} (length ${best.length}) : "No words found.");
+    }
+  },
+
+  4: {
+    title: "Convert string to Title Case",
+    desc: "Enter a string → convert to Title Case.",
+    ui: () => `
+      <div class="field">
+        <label>String</label>
+        <input id="t4_str" placeholder="e.g., hello world from js" />
+      </div>
+      <div class="actions"><button class="run" data-run="t4">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const s = getVal("t4_str");
+      const res = s
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean)
+        .map(w => w[0].toUpperCase() + w.slice(1))
+        .join(" ");
+      setOut(res || "Empty input.");
+    }
+  },
+
+  5: {
+    title: "Replace a word in a string",
+    desc: "Enter a string, word to find, and replacement.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Original string</label>
+          <textarea id="t5_str" placeholder="e.g., I like apples"></textarea>
+        </div>
+        <div class="field">
+          <label>Find word</label>
+          <input id="t5_find" placeholder="e.g., apples" />
+          <div class="hint">Replaces all matches (case-sensitive).</div>
+          <label style="margin-top:10px">Replace with</label>
+          <input id="t5_rep" placeholder="e.g., bananas" />
+        </div>
+      </div>
+      <div class="actions"><button class="run" data-run="t5">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const s = getVal("t5_str");
+      const f = getVal("t5_find");
+      const r = getVal("t5_rep");
+      if (!f) return setOut("Find word is empty.");
+      const res = s.split(f).join(r);
+      setOut(res);
+    }
+  },
+
+  6: {
+    title: "Count vowels in a string",
+    desc: "Counts a, e, i, o, u in the input string.",
+    ui: () => `
+      <div class="field">
+        <label>String</label>
+        <input id="t6_str" placeholder="e.g., Gulzhan" />
+      </div>
+      <div class="actions"><button class="run" data-run="t6">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const s = getVal("t6_str");
+      const m = s.match(/[aeiou]/gi);
+      const count = m ? m.length : 0;
+      setOut(Vowels count: ${count});
+    }
+  },
+
+  7: {
+    title: "Create an array from user popup input",
+    desc: "Uses prompt() to ask for comma-separated values and creates an array.",
+    ui: () => `
+      <div class="actions">
+        <button class="run" data-run="t7">Run (Prompt)</button>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const input = prompt("Enter array values separated by commas:\nExample: a,b,c,10");
+      if (input === null) return setOut("Canceled.");
+      const arr = parseCSV(input);
+      setOut(Array:\n[ ${arr.map(x=>JSON.stringify(x)).join(", ")} ]\nLength: ${arr.length});
+    }
+  },
+
+  8: {
+    title: "Display third element from array",
+    desc: "Enter comma-separated array → shows 3rd element (index 2).",
+    ui: () => `
+      <div class="field">
+        <label>Array values (comma-separated)</label>
+        <input id="t8_arr" placeholder="e.g., 10,20,30,40" />
+      </div>
+      <div class="actions"><button class="run" data-run="t8">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const arr = parseCSV(getVal("t8_arr"));
+      if (arr.length < 3) return setOut("Array has less than 3 elements.");
+      setOut(Third element: ${arr[2]});
+    }
+  },
+
+  9: {
+    title: "Find last element from array (popup)",
+    desc: "Uses prompt() to input array and displays last element.",
+    ui: () => `
+      <div class="actions">
+        <button class="run" data-run="t9">Run (Prompt)</button>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const input = prompt("Enter array values separated by commas:");
+      if (input === null) return setOut("Canceled.");
+      const arr = parseCSV(input);
+      if (!arr.length) return setOut("Empty array.");
+      setOut(Last element: ${arr[arr.length-1]});
+    }
+  },
+
+  10: {
+    title: "Find index of a given element in array",
+    desc: "Enter array + element → returns index (0-based).",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Array (comma-separated)</label>
+          <input id="t10_arr" placeholder="e.g., a,b,c,d" />
+        </div>
+        <div class="field">
+          <label>Element to find</label>
+          <input id="t10_el" placeholder="e.g., c" />
+        </div>
+      </div>
+      <div class="actions"><button class="run" data-run="t10">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const arr = parseCSV(getVal("t10_arr"));
+      const el = getVal("t10_el");
+      const idx = arr.indexOf(el);
+      setOut(Index of "${el}": ${idx});
+    }
+  },
+
+  11: {
+    title: "Apply map() to square each element",
+    desc: "Enter numbers → squares each element using map().",
+    ui: () => `
+      <div class="field">
+        <label>Numbers (comma-separated)</label>
+        <input id="t11_nums" placeholder="e.g., 1,2,3,4" />
+      </div>
+      <div class="actions"><button class="run" data-run="t11">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const nums = parseNums(getVal("t11_nums"));
+      const squared = nums.map(n => n*n);
+      setOut(Input: [${nums.join(", ")}]\nSquared: [${squared.join(", ")}]);
+    }
+  },
+
+  12: {
+    title: "Sort array in ascending order",
+    desc: "Enter numbers → sorts ascending.",
+    ui: () => `
+      <div class="field">
+        <label>Numbers (comma-separated)</label>
+        <input id="t12_nums" placeholder="e.g., 9,2,10,1" />
+      </div>
+      <div class="actions"><button class="run" data-run="t12">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const nums = parseNums(getVal("t12_nums"));
+      const sorted = [...nums].sort((a,b)=>a-b);
+      setOut(Sorted: [${sorted.join(", ")}]);
+    }
+  },
+
+  13: {
+    title: "Use splice to replace elements",
+    desc: "Splice(start, deleteCount, ...items). Shows before and after.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Array (comma-separated)</label>
+          <input id="t13_arr" placeholder="e.g., a,b,c,d,e" />
+        </div>
+        <div class="field">
+          <label>Start index</label>
+          <input id="t13_start" type="number" value="1" />
+          <label style="margin-top:10px">Delete count</label>
+          <input id="t13_del" type="number" value="2" />
+          <label style="margin-top:10px">Insert items (comma-separated)</label>
+          <input id="t13_items" placeholder="e.g., X,Y" />
+        </div>
+      </div>
+      <div class="actions"><button class="run" data-run="t13">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const arr = parseCSV(getVal("t13_arr"));
+      const start = Number(getVal("t13_start"));
+      const del = Number(getVal("t13_del"));
+      const items = parseCSV(getVal("t13_items"));
+      const before = [...arr];
+      const removed = arr.splice(start, del, ...items);
+      setOut(
+        Before: [${before.join(", ")}]\nRemoved: [${removed.join(", ")}]\nAfter:  [${arr.join(", ")}]
+      );
+    }
+  },
+
+  14: {
+    title: "Use splice to delete + insert simultaneously",
+    desc: "Same splice() idea: delete some and insert new items at same position.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Array (comma-separated)</label>
+          <input id="t14_arr" placeholder="e.g., 1,2,3,4,5" />
+        </div>
+        <div class="field">
+          <label>Start index</label>
+          <input id="t14_start" type="number" value="2" />
+          <label style="margin-top:10px">Delete count</label>
+          <input id="t14_del" type="number" value="2" />
+          <label style="margin-top:10px">Insert items (comma-separated)</label>
+          <input id="t14_items" placeholder="e.g., 99,100" />
+        </div>
+      </div>
+      <div class="actions"><button class="run" data-run="t14">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const arr = parseCSV(getVal("t14_arr"));
+      const start = Number(getVal("t14_start"));
+      const del = Number(getVal("t14_del"));
+      const items = parseCSV(getVal("t14_items"));
+      const before = [...arr];
+      const removed = arr.splice(start, del, ...items);
+      setOut(Before: [${before.join(", ")}]\nDelete: [${removed.join(", ")}]\nInsert: [${items.join(", ")}]\nAfter:  [${arr.join(", ")}]);
+    }
+  },
+
+  15: {
+    title: "Arithmetic operations based on user choice",
+    desc: "Choose operation and compute result.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Number A</label>
+          <input id="t15_a" type="number" placeholder="e.g., 10" />
+        </div>
+        <div class="field">
+          <label>Number B</label>
+          <input id="t15_b" type="number" placeholder="e.g., 3" />
+        </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Operation</label>
+        <select id="t15_op">
+          <option value="+">+</option>
+          <option value="-">-</option>
+          <option value=""></option>
+          <option value="/">/</option>
+          <option value="%">%</option>
+          <option value="pow">power (a^b)</option>
+        </select>
+      </div>
+      <div class="actions"><button class="run" data-run="t15">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const a = Number(getVal("t15_a"));
+      const b = Number(getVal("t15_b"));
+      const op = getVal("t15_op");
+      if (!Number.isFinite(a) || !Number.isFinite(b)) return setOut("Enter valid numbers.");
+      let res;
+      switch(op){
+        case "+": res = a + b; break;
+        case "-": res = a - b; break;
+        case "*": res = a * b; break;
+        case "/": res = (b===0) ? "Division by zero!" : (a / b); break;
+        case "%": res = (b===0) ? "Modulo by zero!" : (a % b); break;
+        case "pow": res = a ** b; break;
+        default: res = "Unknown operation";
+      }
+      setOut(Result: ${res});
+    }
+  },
+
+  16: {
+    title: "Function: calculate factorial",
+    desc: "Enter n → factorial(n).",
+    ui: () => `
+      <div class="field">
+        <label>n (integer ≥ 0)</label>
+        <input id="t16_n" type="number" placeholder="e.g., 5" />
+      </div>
+      <div class="actions"><button class="run" data-run="t16">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const n = Number(getVal("t16_n"));
+      if (!Number.isInteger(n) || n < 0) return setOut("n must be an integer ≥ 0.");
+      let f = 1;
+      for(let i=2;i<=n;i++) f *= i;
+      setOut(${n}! = ${f});
+    }
+  },
+
+  17: {
+    title: "Function: check even/odd",
+    desc: "Enter integer → even or odd.",
+    ui: () => `
+      <div class="field">
+        <label>Integer</label>
+        <input id="t17_n" type="number" placeholder="e.g., 7" />
+      </div>
+      <div class="actions"><button class="run" data-run="t17">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const n = Number(getVal("t17_n"));
+      if (!Number.isInteger(n)) return setOut("Enter an integer.");
+      setOut(${n} is ${n%2===0 ? "EVEN" : "ODD"}.);
+    }
+  },
+
+  18: {
+    title: "Function: find max of 3 numbers",
+    desc: "Enter 3 numbers → shows maximum.",
+    ui: () => `
+      <div class="grid">
+        <div class="field"><label>A</label><input id="t18_a" type="number" /></div>
+        <div class="field"><label>B</label><input id="t18_b" type="number" /></div>
+        <div class="field"><label>C</label><input id="t18_c" type="number" /></div>
+      </div>
+      <div class="actions"><button class="run" data-run="t18">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const a = Number(getVal("t18_a"));
+      const b = Number(getVal("t18_b"));
+      const c = Number(getVal("t18_c"));
+      if (![a,b,c].every(Number.isFinite)) return setOut("Enter all 3 numbers.");
+      setOut(Max = ${Math.max(a,b,c)});
+    }
+  },
+
+  19: {
+    title: "Function: sum of array values",
+    desc: "Enter numbers → sum them.",
+    ui: () => `
+      <div class="field">
+        <label>Numbers (comma-separated)</label>
+        <input id="t19_nums" placeholder="e.g., 1,2,3,4" />
+      </div>
+      <div class="actions"><button class="run" data-run="t19">Run</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const nums = parseNums(getVal("t19_nums"));
+      const sum = nums.reduce((acc,n)=>acc+n,0);
+      setOut(Sum = ${sum});
+    }
+  },
+
+  20: {
+    title: "Popup: allow only 10 digits input",
+    desc: "Uses prompt() and checks that input is exactly 10 digits.",
+    ui: () => `
+      <div class="actions">
+        <button class="run" data-run="t20">Run (Prompt)</button>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const val = prompt("Enter ONLY 10 digits (example: 1234567890):");
+      if (val === null) return setOut("Canceled.");
+      const ok = /^\d{10}$/.test(val.trim());
+      setOut(ok ? ✅ Valid 10-digit input: ${val.trim()} : ❌ Invalid. You entered: "${val}");
+    }
+  },
+
+  21: {
+    title: "Popup: detect numeric vs string and apply allowed operations",
+    desc: "If numeric → choose +,-,*,/ with another number. If string → choose uppercase/lowercase/reverse.",
+    ui: () => `
+      <div class="actions">
+        <button class="run" data-run="t21">Run (Prompt)</button>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const v = prompt("Enter a value (number or text):");
+      if (v === null) return setOut("Canceled.");
+      const trimmed = v.trim();
+
+      const isNum = trimmed !== "" && Number.isFinite(Number(trimmed));
+      if (isNum){
+        const a = Number(trimmed);
+        const op = prompt('Numeric detected.\nChoose operation: +  -  *  /');
+        if (op === null) return setOut("Canceled.");
+        const bStr = prompt("Enter second number:");
+        if (bStr === null) return setOut("Canceled.");
+        const b = Number(bStr);
+        if (!Number.isFinite(b)) return setOut("Second input is not a number.");
+
+        let res;
+        if (op === "+") res = a + b;
+        else if (op === "-") res = a - b;
+        else if (op === "*") res = a * b;
+        else if (op === "/") res = (b===0) ? "Division by zero!" : (a / b);
+        else return setOut("Unknown operation.");
+
+        setOut(Number mode:\n${a} ${op} ${b} = ${res});
+      } else {
+        const choice = prompt("String detected.\nChoose: 1) uppercase  2) lowercase  3) reverse");
+        if (choice === null) return setOut("Canceled.");
+        let res;
+        if (choice === "1") res = trimmed.toUpperCase();
+        else if (choice === "2") res = trimmed.toLowerCase();
+        else if (choice === "3") res = trimmed.split("").reverse().join("");
+        else return setOut("Unknown choice.");
+        setOut(String mode:\nResult: ${res});
+      }
+    }
+  },
+
+  22: {
+    title: "Validate: password min length rule",
+    desc: "Checks if password length >= minimum.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Password</label>
+          <input id="t22_pass" type="password" placeholder="Enter password" />
+        </div>
+        <div class="field">
+          <label>Min length</label>
+          <input id="t22_min" type="number" value="8" />
+        </div>
+      </div>
+      <div class="actions"><button class="run" data-run="t22">Validate</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const p = getVal("t22_pass");
+      const min = Number(getVal("t22_min"));
+      if (!Number.isInteger(min) || min<1) return setOut("Min length must be a positive integer.");
+      setOut(p.length >= min ? ✅ Valid (length ${p.length} >= ${min}) : ❌ Invalid (length ${p.length} < ${min}));
+    }
+  },
+
+  23: {
+    title: "Validate: required field not empty",
+    desc: "Checks if required field has any text (trim).",
+    ui: () => `
+      <div class="field">
+        <label>Required field</label>
+        <input id="t23_req" placeholder="Type something..." />
+      </div>
+      <div class="actions"><button class="run" data-run="t23">Validate</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const v = getVal("t23_req").trim();
+      setOut(v ? "✅ OK: field is not empty." : "❌ Error: field is empty.");
+    }
+  },
+
+  24: {
+    title: "Signup form with submit/reset",
+    desc: "Simple signup form validation. Submit shows message; Reset clears.",
+    ui: () => `
+      <form id="t24_form">
+        <div class="grid">
+          <div class="field"><label>Full name</label><input id="t24_name" /></div>
+          <div class="field"><label>Email</label><input id="t24_email" type="email" /></div>
+          <div class="field"><label>Password</label><input id="t24_pass" type="password" /></div>
+        </div>
+        <div class="actions">
+          <button class="run" type="submit">Submit</button>
+          <button class="ghost" type="reset">Reset</button>
+        </div>
+      </form>
+      <div class="out" data-out></div>
+    `,
+    run: () => {}, // handled by form events
+    afterRender: () => {
+      const form = taskCard.querySelector("#t24_form");
+      form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        const name = getVal("t24_name").trim();
+        const email = getVal("t24_email").trim();
+        const pass = getVal("t24_pass");
+        if (!name || !email || !pass) return setOut("❌ Please fill all fields.");
+        setOut(✅ Signup OK!\nName: ${name}\nEmail: ${email}\nPassword length: ${pass.length});
+      });
+      form.addEventListener("reset", ()=>{
+        setTimeout(()=>setOut("Output cleared."),0);
+      });
+    }
+  },
+
+  25: {
+    title: "Display form output in a table format",
+    desc: "Enter values → Add to table.",
+    ui: () => `
+      <div class="grid">
+        <div class="field"><label>Name</label><input id="t25_name" /></div>
+        <div class="field"><label>Email</label><input id="t25_email" type="email" /></div>
+        <div class="field"><label>Phone</label><input id="t25_phone" placeholder="optional" /></div>
+      </div>
+      <div class="actions">
+        <button class="run" data-run="t25">Add to Table</button>
+        <button class="ghost" id="t25_resetTable">Clear Table</button>
+      </div>
+      <div id="t25_tableWrap"></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const name = getVal("t25_name").trim();
+      const email = getVal("t25_email").trim();
+      const phone = getVal("t25_phone").trim();
+      if (!name || !email) return setOut("❌ Name and Email are required.");
+      signupRows.push({ name, email, phone });
+      renderSignupTable();
+      setOut("✅ Row added.");
+    },
+    afterRender: () => {
+      taskCard.querySelector("#t25_resetTable").addEventListener("click", ()=>{
+        signupRows = [];
+        renderSignupTable();
+        setOut("Table cleared.");
+      });
+      renderSignupTable();
+    }
+  },
+
+  26: {
+    title: "Clear output on reset",
+    desc: "Demonstrates that reset clears output.",
+    ui: () => `
+      <form id="t26_form">
+        <div class="field">
+          <label>Type something</label>
+          <input id="t26_text" placeholder="write here..." />
+        </div>
+        <div class="actions">
+          <button class="run" type="submit">Show Output</button>
+          <button class="ghost" type="reset">Reset</button>
+        </div>
+      </form>
+      <div class="out" data-out></div>
+    `,
+    run: () => {},
+    afterRender: () => {
+      const form = taskCard.querySelector("#t26_form");
+      form.addEventListener("submit",(e)=>{
+        e.preventDefault();
+        setOut(getVal("t26_text"));
+      });
+      form.addEventListener("reset",()=>{
+        setTimeout(()=>setOut(""),0); // clear output
+      });
+    }
+  },
+
+  27: {
+    title: "Create person object and update age using input",
+    desc: "Creates person object {name, age} and updates age.",
+    ui: () => `
+      <div class="grid">
+        <div class="field"><label>Name</label><input id="t27_name" placeholder="e.g., Gulzhan" /></div>
+        <div class="field"><label>Age</label><input id="t27_age" type="number" placeholder="e.g., 19" /></div>
+        <div class="field"><label>New age (update)</label><input id="t27_newAge" type="number" placeholder="e.g., 20" /></div>
+      </div>
+      <div class="actions"><button class="run" data-run="t27">Create/Update</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      const name = getVal("t27_name").trim();
+      const age = Number(getVal("t27_age"));
+      const newAge = Number(getVal("t27_newAge"));
+      if (!name || !Number.isFinite(age)) return setOut("Enter valid name and age.");
+      personObj = { name, age };
+      if (Number.isFinite(newAge)) personObj.age = newAge;
+      setOut(✅ Person saved.\n${JSON.stringify(personObj, null, 2)});
+    }
+  },
+
+  28: {
+    title: "Display object after update",
+    desc: "Shows the current person object from Task 27.",
+    ui: () => `
+      <div class="actions"><button class="run" data-run="t28">Show Person Object</button></div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {
+      if (!personObj) return setOut("No person object yet. Do Task 27 first.");
+      setOut(JSON.stringify(personObj, null, 2));
+    }
+  },
+
+  29: {
+    title: "Countdown timer using setInterval with Start/Pause/Reset",
+    desc: "Enter seconds → Start / Pause / Reset.",
+    ui: () => `
+      <div class="grid">
+        <div class="field">
+          <label>Start seconds</label>
+          <input id="t29_sec" type="number" value="10" min="0"/>
+          <div class="hint">Reset uses this value.</div>
+        </div>
+        <div class="field">
+          <label>Display</label>
+          <div class="timerBox">
+            <div class="timerDisplay" id="t29_display">00:00</div>
+            <span class="badge" id="t29_state">STOPPED</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="run" id="t29_start">Start</button>
+        <button class="ghost" id="t29_pause">Pause</button>
+        <button class="ghost" id="t29_reset">Reset</button>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {},
+    afterRender: () => {
+      const disp = taskCard.querySelector("#t29_display");
+      const state = taskCard.querySelector("#t29_state");
+
+      function fmt(sec){
+        sec = Math.max(0, Math.floor(sec));
+        const m = String(Math.floor(sec/60)).padStart(2,"0");
+        const s = String(sec%60).padStart(2,"0");
+        return ${m}:${s};
+      }
+      function sync(){
+        disp.textContent = fmt(timer.remaining);
+        state.textContent = timer.running ? "RUNNING" : "STOPPED";
+      }
+      function start(){
+        if (timer.running) return;
+        timer.running = true;
+        state.textContent = "RUNNING";
+        timer.id = setInterval(()=>{
+          timer.remaining--;
+          sync();
+          if (timer.remaining <= 0){
+            timer.remaining = 0;
+            pause();
+            setOut("✅ Time up!");
+          }
+        }, 1000);
+      }
+      function pause(){
+        timer.running = false;
+        if (timer.id) clearInterval(timer.id);
+        timer.id = null;
+        sync();
+      }
+      function reset(){
+        pause();
+        const s = Number(getVal("t29_sec"));
+        timer.remaining = Number.isFinite(s) ? Math.max(0, Math.floor(s)) : 0;
+        sync();
+        setOut("Reset done.");
+      }
+
+      taskCard.querySelector("#t29_start").addEventListener("click", ()=>{
+        if (!timer.remaining) {
+          const s = Number(getVal("t29_sec"));
+          timer.remaining = Number.isFinite(s) ? Math.max(0, Math.floor(s)) : 0;
         }
-    },
-    2:{ title:"Extract first and last character from a string",
-        desc:"Input a string. Output = first + last char.",
-        inputs:[{id:"t2", ph:"e.g. JavaScript"}],
-        run:()=> {
-          const s=val("t2");
-          if(!s) return "Enter a string.";
-          return First: ${s[0]} | Last: ${s[s.length-1]};
-        }
-    },
-    3:{ title:"Find longest word from sentence",
-        desc:"Input a sentence. Output = longest word.",
-        inputs:[{id:"t3", ph:"e.g. I love JavaScript programming"}],
-        run:()=> {
-          const s=val("t3").trim();
-          if(!s) return "Enter a sentence.";
-          const words=s.split(/\s+/);
-          let longest="";
-          for(const w of words) if(w.length>longest.length) longest=w;
-          return Longest word: ${longest};
-        }
-    },
-    4:{ title:"Convert string to Title Case",
-        desc:"Input: hello world → Output: Hello World",
-        inputs:[{id:"t4", ph:"e.g. hello world"}],
-        run:()=> val("t4").replace(/\b\w/g, c=>c.toUpperCase())
-    },
-    5:{ title:"Replace a word in a string",
-        desc:"Enter string + find word + replace word.",
-        inputs:[
-          {id:"t5s", ph:"String (e.g. I love JS)"},
-          {id:"t5a", ph:"Find (e.g. JS)"},
-          {id:"t5b", ph:"Replace with (e.g. JavaScript)"}
-        ],
-        run:()=> {
-          const s=val("t5s"), a=val("t5a"), b=val("t5b");
-          if(!s || !a) return "Enter string + find word.";
-          return s.replaceAll(a,b);
-        }
-    },
-    6:{ title:"Count vowels in a string",
-        desc:"Counts a,e,i,o,u (case-insensitive).",
-        inputs:[{id:"t6", ph:"e.g. education"}],
-        run:()=> {
-          const s=val("t6");
-          const m=s.match(/[aeiou]/gi);
-          return Vowels count: ${m?m.length:0};
-        }
-    },
-    7:{ title:"Create an array from user input (NO popup)",
-        desc:"Type comma separated values and Save. Saved array is used by tasks 8–10.",
-        inputs:[{id:"t7", ph:"Enter values (e.g. a,b,c)"}],
-        extraButtons:[{text:"Save Array", action:"saveArray"}],
-        run:()=> "Click “Save Array” button to store array."
-    },
-    8:{ title:"Display third element from array",
-        desc:"Uses saved array from task 7.",
-        inputs:[],
-        run:()=> {
-          if(savedArray.length<3) return "Run task 7 and save array first (need at least 3 elements).";
-          return 3rd element: ${savedArray[2]};
-        }
-    },
-    9:{ title:"Find last element from array (NO popup)",
-        desc:"Uses saved array from task 7 and displays last element.",
-        inputs:[],
-        run:()=> {
-          if(savedArray.length===0) return "Run task 7 and save array first.";
-          return Last element: ${savedArray[savedArray.length-1]};
-        }
-    },
-    10:{ title:"Find index of a given element in array",
-         desc:"Uses saved array from task 7.",
-         inputs:[{id:"t10", ph:"Element to find (e.g. apple)"}],
-         run:()=> {
-           if(savedArray.length===0) return "Run task 7 and save array first.";
-           const el=val("t10").trim();
-           return Index of "${el}": ${savedArray.indexOf(el)};
-         }
-    },
-    11:{ title:"Apply map() to square each element",
-         desc:"Enter numbers comma separated.",
-         inputs:[{id:"t11", ph:"e.g. 1,2,3,4"}],
-         run:()=> {
-           const arr=toNums(val("t11"));
-           return Squared: [${arr.map(n=>n*n).join(", ")}];
-         }
-    },
-    12:{ title:"Sort array in ascending order",
-         desc:"Enter numbers comma separated.",
-         inputs:[{id:"t12", ph:"e.g. 5,1,9,3"}],
-         run:()=> {
-           const arr=toNums(val("t12"));
-           arr.sort((a,b)=>a-b);
-           return Sorted: [${arr.join(", ")}];
-         }
-    },
-    13:{ title:"Use splice to replace elements",
-         desc:"Array + index + new value.",
-         inputs:[
-           {id:"t13a", ph:"Array (e.g. 1,2,3,4)"},
-           {id:"t13i", ph:"Index (e.g. 1)"},
-           {id:"t13v", ph:"New value (e.g. 99)"}
-         ],
-         run:()=> {
-           const arr=toNums(val("t13a"));
-           const i=Number(val("t13i"));
-           const v=Number(val("t13v"));
-           if(Number.isNaN(i)||Number.isNaN(v)) return "Enter valid index and value.";
-           arr.splice(i,1,v);
-           return After splice replace: [${arr.join(", ")}];
-         }
-    },
-    14:{ title:"Use splice to delete + insert simultaneously",
-         desc:"Array + start index + delete count + insert values.",
-         inputs:[
-           {id:"t14a", ph:"Array (e.g. 1,2,3,4)"},
-           {id:"t14i", ph:"Index (e.g. 2)"},
-           {id:"t14d", ph:"Delete count (e.g. 1)"},
-           {id:"t14ins", ph:"Insert (e.g. 10,20)"}
-         ],
-         run:()=> {
-           const arr=toNums(val("t14a"));
-           const i=Number(val("t14i"));
-           const d=Number(val("t14d"));
-           const ins=toNums(val("t14ins"));
-           if(Number.isNaN(i)||Number.isNaN(d)) return "Enter valid index and delete count.";
-           arr.splice(i,d,...ins);
-           return After splice delete+insert: [${arr.join(", ")}];
-         }
-    },
-    15:{ title:"Function: arithmetic operations based on user choice",
-         desc:"Enter a, b and choose operation.",
-         inputs:[
-           {id:"t15a", ph:"a (e.g. 10)"},
-           {id:"t15b", ph:"b (e.g. 5)"},
-           {id:"t15op", type:"select", options:["+", "-", "*", "/"]}
-         ],
-         run:()=> {
-           const a=Number(val("t15a")), b=Number(val("t15b")), op=val("t15op");
-           if(Number.isNaN(a)||Number.isNaN(b)) return "Enter valid numbers.";
-           if(op==="/" && b===0) return "Cannot divide by 0";
-           return Result: ${op==="+"?a+b:op==="-"?a-b:op==="*"?a*b:a/b};
-         }
-    },
-    16:{ title:"Function: calculate factorial",
-         desc:"Enter n (>=0).",
-         inputs:[{id:"t16", ph:"n (e.g. 5)"}],
-         run:()=> {
-           const n=Number(val("t16"));
-           if(Number.isNaN(n)) return "Enter valid number.";
-           if(n<0) return "No factorial for negative numbers.";
-           let f=1; for(let i=1;i<=n;i++) f*=i;
-           return Factorial(${n}) = ${f};
-         }
-    },
-    17:{ title:"Function: check even/odd",
-         desc:"Enter n.",
-         inputs:[{id:"t17", ph:"n (e.g. 7)"}],
-         run:()=> {
-           const n=Number(val("t17"));
-           if(Number.isNaN(n)) return "Enter valid number.";
-           return (n%2===0) ? "Even" : "Odd";
-         }
-    },
-    18:{ title:"Function: find max of 3 numbers",
-         desc:"Enter a, b, c.",
-         inputs:[
-           {id:"t18a", ph:"a"},
-           {id:"t18b", ph:"b"},
-           {id:"t18c", ph:"c"}
-         ],
-         run:()=> {
-           const a=Number(val("t18a")), b=Number(val("t18b")), c=Number(val("t18c"));
-           if([a,b,c].some(Number.isNaN)) return "Enter all 3 numbers.";
-           return Max = ${Math.max(a,b,c)};
-         }
-    },
-    19:{ title:"Function: sum of array values",
-         desc:"Enter numbers comma separated.",
-         inputs:[{id:"t19", ph:"e.g. 1,2,3,4"}],
-         run:()=> {
-           const arr=toNums(val("t19"));
-           const sum=arr.reduce((x,y)=>x+y,0);
-           return Sum = ${sum};
-         }
-    },
-    20:{ title:"Allow only 10 digits input (NO popup)",
-         desc:"Enter exactly 10 digits and run.",
-         inputs:[{id:"t20", ph:"10 digits (e.g. 1234567890)"}],
-         run:()=> {
-           const s=val("t20").trim();
-           return (/^\\d{10}$/).test(s) ? "Valid ✅ (10 digits)" : "Invalid ❌ (must be exactly 10 digits)";
-         }
-    },
-    21:{ title:"Detect numeric vs string and apply operations (NO popup)",
-         desc:"If number → square & double. If string → upper & length.",
-         inputs:[{id:"t21", ph:"Enter value (number or text)"}],
-         run:()=> {
-           const x=val("t21");
-           const trimmed=x.trim();
-           if(trimmed!=="" && !isNaN(trimmed)){
-             const n=Number(trimmed);
-             return Numeric detected:\\nSquare = ${n*n}\\nDouble = ${n*2};
-           }
-           return String detected:\\nUpper = "${x.toUpperCase()}"\\nLength = ${x.length};
-         }
-    },
-    22:{ title:"Validate: password min length rule",
-         desc:"Enter password. Must be at least 6 chars.",
-         inputs:[{id:"t22", ph:"Password (min 6)"}],
-         run:()=> val("t22").length>=6 ? "Password valid ✅" : "Password invalid ❌ (min 6 chars)"
-    },
-    23:{ title:"Validate: required field not empty",
-         desc:"Enter any required field.",
-         inputs:[{id:"t23", ph:"Required field"}],
-         run:()=> val("t23").trim()!=="" ? "OK ✅" : "Required ❌ (cannot be empty)"
-    },
-    24:{ title:"Signup form with submit/reset (demo)",
-         desc:"Enter name, email, password and run.",
-         inputs:[
-           {id:"t24name", ph:"Name"},
-           {id:"t24email", ph:"Email"},
-           {id:"t24pwd", ph:"Password"}
-         ],
-         run:()=> Submitted:\\nName: ${val("t24name")}\\nEmail: ${val("t24email")}\\nPassword: ${"*".repeat(val("t24pwd").length)}
-    },
-    25:{ title:"Display form output in a table format",
-         desc:"Enter name & email, output shows table text.",
-         inputs:[
-           {id:"t25name", ph:"Name"},
-           {id:"t25email", ph:"Email"}
-         ],
-         run:()=> {
-           const name=val("t25name").trim(), email=val("t25email").trim();
-           if(!name || !email) return "Enter name and email.";
-           return TABLE:\\n| Name | Email |\\n| ${name} | ${email} |;
-         }
-    },
-    26:{ title:"Clear output on reset",
-         desc:"Click top Reset button to clear output + inputs + saved array.",
-         inputs:[],
-         run:()=> "Use top Reset button ✅"
-    },
-    27:{ title:"Create person object and update age using input",
-         desc:"Enter name, age, new age.",
-         inputs:[
-           {id:"t27name", ph:"Name (e.g. Ali)"},
-           {id:"t27age", ph:"Age (e.g. 20)"},
-           {id:"t27new", ph:"New age (e.g. 22)"}
-         ],
-         run:()=> {
-           const name=val("t27name").trim()||"Unknown";
-           const age=Number(val("t27age"));
-           const newAge=Number(val("t27new"));
-           if(Number.isNaN(age)||Number.isNaN(newAge)) return "Enter valid ages.";
-           let person={name, age};
-           person.age=newAge;
-           return Person object:\\n${JSON.stringify(person,null,2)};
-         }
-    },
-    28:{ title:"Display object after update",
-         desc:"Same output as task 27 (shows updated object).",
-         inputs:[],
-         run:()=> "Open Task 27 and run — it displays updated object ✅"
-    },
-    29:{ title:"Countdown timer using setInterval (Start/Pause/Reset)",
-         desc:"Enter start seconds, then use Start/Pause/Reset buttons.",
-         inputs:[{id:"t29", ph:"Start seconds (e.g. 10)"}],
-         extraButtons:[
-           {text:"Start", action:"timerStart"},
-           {text:"Pause", action:"timerPause"},
-           {text:"Reset", action:"timerReset"}
-         ],
-         run:()=> "Use Start/Pause/Reset buttons above ✅"
-    },
-    30:{ title:"Hover event: change button style on mouse over",
-         desc:"Hover the button below to see style change.",
-         inputs:[{id:"t30demo", type:"hoverBtn"}],
-         run:()=> "Hover the button ✅"
-    },
+        sync();
+        start();
+      });
+      taskCard.querySelector("#t29_pause").addEventListener("click", pause);
+      taskCard.querySelector("#t29_reset").addEventListener("click", reset);
+
+      // init
+      timer.remaining = Math.max(0, Math.floor(Number(getVal("t29_sec")) || 0));
+      sync();
+    }
+  },
+
+  30: {
+    title: "Hover event: change button style on mouse over",
+    desc: "Hover over the button to see style change.",
+    ui: () => `
+      <div class="actions">
+        <button class="run" id="t30_btn">Hover Me</button>
+        <span class="badge">Mouseover / Mouseout</span>
+      </div>
+      <div class="out" data-out></div>
+    `,
+    run: () => {},
+    afterRender: () => {
+      const btn = taskCard.querySelector("#t30_btn");
+      btn.addEventListener("mouseover", ()=>{
+        btn.style.transform = "scale(1.05)";
+        btn.style.boxShadow = "0 10px 22px rgba(255,79,163,.35)";
+        btn.style.filter = "brightness(1.05)";
+        setOut("Mouse is OVER the button ✅");
+      });
+      btn.addEventListener("mouseout", ()=>{
+        btn.style.transform = "scale(1)";
+        btn.style.boxShadow = "none";
+        btn.style.filter = "none";
+        setOut("Mouse left the button.");
+      });
+    }
+  },
+};
+
+/* ========= Missing tasks? (We must include ALL 1-30) =========
+We already have all 1..30 keys except 24-30 yes. Good.
+But task list includes 24=signup,25=table,26=clear output,27-28 person object,29 timer,30 hover.
+Done.
+*/
+
+/* ========= Render Task ========= */
+function renderTask(n){
+  const t = tasks[n];
+  if (!t) return;
+
+  taskCard.style.display = "block";
+  taskCard.innerHTML = `
+    <div class="taskTitle">
+      Task ${n}: ${esc(t.title)}
+    </div>
+    <div class="desc">${esc(t.desc || "")}</div>
+    ${t.ui ? t.ui() : ""}
+  `;
+
+  // attach run button handler (delegation)
+  taskCard.onclick = (e) => {
+    const btn = e.target.closest("[data-run]");
+    if (!btn) return;
+    const key = btn.getAttribute("data-run");
+    // map data-run to task number: "t1" -> 1
+    const m = key.match(/^t(\d+)$/);
+    if (!m) return;
+    const taskNum = Number(m[1]);
+    if (tasks[taskNum] && typeof tasks[taskNum].run === "function"){
+      tasks[taskNum].run();
+    }
   };
 
-  function openTask(){
-    const n = Number($("taskSelect").value);
-    if(!n) return;
-    renderTask(n);
-  }
+  // specific afterRender hooks
+  if (typeof t.afterRender === "function") t.afterRender();
 
-  function renderTask(n){
-    const t = TASKS[n];
-    $("taskCard").classList.remove("hide");
-    $("taskHeading").textContent = ${n}) ${t.title};
-    $("taskDesc").textContent = t.desc;
-    $("taskBadge").textContent = Task ${n};
+  // clear output by default
+  const out = taskCard.querySelector("[data-out]");
+  if (out) out.innerHTML = <pre>Select inputs and click Run.</pre>;
+}
 
-    // inputs
-    const area = $("inputsArea");
-    area.innerHTML = "";
+/* ========= Task 25 helper ========= */
+function renderSignupTable(){
+  const wrap = taskCard.querySelector("#t25_tableWrap");
+  if (!wrap) return;
+  if (!signupRows.length){
+    wrap.innerHTML = <div class="hint">No rows yet. Add data to see table.</div>;
+    return;
+  }
+  const rowsHtml = signupRows.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${esc(r.name)}</td>
+      <td>${esc(r.email)}</td>
+      <td>${esc(r.phone || "-")}</td>
+    </tr>
+  `).join("");
+  wrap.innerHTML = `
+    <table>
+      <thead>
+        <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th></tr>
+      </thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>
+  `;
+}
 
-    (t.inputs || []).forEach(inp=>{
-      if(inp.type === "select"){
-        const sel=document.createElement("select");
-        sel.id=inp.id;
-        inp.options.forEach(op=>{
-          const o=document.createElement("option");
-          o.value=op; o.textContent=op;
-          sel.appendChild(o);
-        });
-        area.appendChild(sel);
-        return;
-      }
-      if(inp.type === "hoverBtn"){
-        const btn=document.createElement("button");
-        btn.textContent="Hover Me";
-        btn.style.background = "var(--pink)";
-        btn.style.color = "#fff";
-        btn.onmouseover = ()=>{ btn.style.background="#1e1e1e"; $("output").textContent="Mouse over ✅ style changed."; };
-        btn.onmouseout  = ()=>{ btn.style.background="var(--pink)"; $("output").textContent="Mouse out ✅ style restored."; };
-        area.appendChild(btn);
-        return;
-      }
-      const input=document.createElement("input");
-      input.id=inp.id;
-      input.placeholder=inp.ph || "";
-      area.appendChild(input);
-    });
+/* ========= Fill dropdown ========= */
+for(let i=1;i<=30;i++){
+  const opt = document.createElement("option");
+  opt.value = String(i);
+  opt.textContent = Task ${i};
+  taskSelect.appendChild(opt);
+}
 
-    // buttons
-    const btnArea = $("buttonsArea");
-    btnArea.innerHTML = "";
+/* ========= Events ========= */
+taskSelect.addEventListener("change", ()=>{
+  const n = Number(taskSelect.value);
+  if (!n) {
+    taskCard.style.display = "none";
+    taskCard.innerHTML = "";
+    return;
+  }
+  renderTask(n);
+});
 
-    const runBtn = document.createElement("button");
-    runBtn.textContent = "Run";
-    runBtn.onclick = runTask;
-    btnArea.appendChild(runBtn);
+$("#btnReset").addEventListener("click", ()=>{
+  // stop timer if running
+  if (timer.id) clearInterval(timer.id);
+  timer.id = null; timer.running=false; timer.remaining=0;
 
-    (t.extraButtons || []).forEach(b=>{
-      const btn = document.createElement("button");
-      btn.textContent = b.text;
-      btn.onclick = () => handleExtraAction(b.action);
-      btnArea.appendChild(btn);
-    });
-
-    $("output").textContent = "Output will appear here.";
-    stopTimer(); // safety when switching tasks
-  }
-
-  function runTask(){
-    const n = Number($("taskSelect").value);
-    if(!n) return;
-    try{
-      const res = TASKS[n].run();
-      if(typeof res === "string") $("output").textContent = res;
-    }catch(e){
-      $("output").textContent = "Error: " + e.message;
-    }
-  }
-
-  function handleExtraAction(action){
-    if(action === "saveArray"){
-      const input = val("t7");
-      if(!input.trim()) return $("output").textContent = "Enter values first (e.g. a,b,c).";
-      savedArray = input.split(",").map(x=>x.trim());
-      $("output").textContent = Array saved ✅: [${savedArray.join(", ")}];
-      return;
-    }
-    if(action === "timerStart"){ timerStart(); return; }
-    if(action === "timerPause"){ timerPause(); return; }
-    if(action === "timerReset"){ timerReset(); return; }
-  }
-
-  // Navigation
-  function nextTask(){
-    let n = Number($("taskSelect").value) || 1;
-    if(n < 30) n++;
-    $("taskSelect").value = String(n);
-    renderTask(n);
-  }
-  function prevTask(){
-    let n = Number($("taskSelect").value) || 1;
-    if(n > 1) n--;
-    $("taskSelect").value = String(n);
-    renderTask(n);
-  }
-  function backToMenu(){
-    stopTimer();
-    $("taskCard").classList.add("hide");
-    $("output").textContent = "";
-    window.scrollTo({top:0, behavior:"smooth"});
-  }
-
-  function resetAll(){
-    stopTimer();
-    savedArray = [];
-    $("inputsArea").querySelectorAll("input").forEach(i=>i.value="");
-    $("output").textContent = "Cleared ✅";
-  }
-
-  function val(id){ return $(id) ? $(id).value : ""; }
-  function toNums(s){
-    if(!s) return [];
-    return s.split(",").map(x=>Number(x.trim())).filter(x=>!Number.isNaN(x));
-  }
-
-  // Timer (Task 29)
-  function renderTimer(){
-    $("output").textContent = Time: ${timerT}s;
-  }
-  function timerStart(){
-    if(timerT === 0){
-      const start = Number(val("t29"));
-      if(Number.isNaN(start) || start < 0){
-        $("output").textContent = "Enter start seconds (>=0).";
-        return;
-      }
-      timerT = start;
-      timerInitial = start;
-      renderTimer();
-    }
-    if(timerId) return;
-    timerId = setInterval(()=>{
-      if(timerT <= 0){
-        stopTimer();
-        $("output").textContent = "Done ✅";
-        return;
-      }
-      timerT--;
-      renderTimer();
-    }, 1000);
-  }
-  function timerPause(){
-    stopTimer();
-    renderTimer();
-  }
-  function timerReset(){
-    stopTimer();
-    timerT = timerInitial;
-    renderTimer();
-  }
-  function stopTimer(){
-    if(timerId){ clearInterval(timerId); timerId = null; }
-  }
-
-  // Auto open on change
-  $("taskSelect").addEventListener("change", openTask);
+  taskSelect.value = "";
+  taskCard.style.display = "none";
+  taskCard.innerHTML = "";
+});
 </script>
 </body>
 </html>
