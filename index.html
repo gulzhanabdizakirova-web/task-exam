@@ -1,9 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>SET B — Tasks 1–30</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SET B — JavaScript Tasks 1–30</title>
+
 <style>
   :root{
     --pink:#ff4fa3;
@@ -20,48 +21,69 @@
     margin:0;
     font-family: Arial, sans-serif;
     background: linear-gradient(180deg,var(--bg1),var(--bg2));
-    padding: 34px 14px 60px;
+    padding: 28px 14px 60px;
     color: var(--text);
   }
   h1{
     text-align:center;
-    margin: 0 0 14px;
+    margin: 0 0 8px;
     color:#2a5bd7;
     letter-spacing:.3px;
   }
-  .wrap{max-width:980px;margin:0 auto}
+  .sub{
+    text-align:center;
+    color:#3a3a3a;
+    margin:0 0 18px;
+    font-size:14px;
+  }
+  .wrap{max-width:1050px;margin:0 auto}
   .panel{
     background: linear-gradient(135deg,var(--pink),var(--pink2));
     border-radius: 18px;
-    padding: 18px;
+    padding: 16px;
     box-shadow: 0 12px 30px rgba(0,0,0,.12);
     color:#fff;
   }
-  .row{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    align-items:center;
-    margin-top: 10px;
+  .topRow{
+    display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between
   }
-  select, input, button, textarea{
-    padding: 12px 14px;
-    border-radius: 12px;
-    border: none;
-    font-size: 15px;
-    outline: none;
-  }
-  select{min-width: 240px}
-  button{
-    cursor:pointer;
-    font-weight: 700;
-  }
-  .ghost{
+  .title2{font-size:18px;font-weight:800}
+  .hintTop{opacity:.92;font-size:13px;margin-top:4px}
+  .btnReset{
+    padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.35);
     background: rgba(255,255,255,.18);
+    color:#fff;font-weight:800;cursor:pointer
+  }
+
+  /* 30 boxes */
+  .gridBtns{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap:10px;
+  }
+  @media(max-width:900px){ .gridBtns{grid-template-columns: repeat(6, 1fr);} }
+  @media(max-width:520px){ .gridBtns{grid-template-columns: repeat(4, 1fr);} }
+
+  .taskBtn{
+    border:none;
+    border-radius:14px;
+    padding:12px 10px;
+    font-weight:900;
+    cursor:pointer;
+    background: rgba(255,255,255,.20);
     color:#fff;
     border: 1px solid rgba(255,255,255,.35);
+    transition: transform .08s ease, opacity .08s ease;
   }
-  .ghost:hover{opacity:.95}
+  .taskBtn:hover{opacity:.95; transform: translateY(-1px);}
+  .taskBtn.active{
+    background: #fff;
+    color: #a01355;
+    border: 1px solid #ffd0e6;
+  }
+
+  /* task card */
   .card{
     margin-top: 14px;
     background: var(--card);
@@ -69,18 +91,15 @@
     padding: 16px;
     color: var(--text);
   }
-  .meta{
-    color: rgba(255,255,255,.92);
-    font-size: 13px;
-    margin-top: 6px;
-  }
   .taskTitle{
     font-size: 18px;
-    margin: 0 0 10px;
+    font-weight: 900;
+    margin: 0 0 8px;
   }
   .desc{
     margin: 0 0 12px;
     color: #333;
+    font-size: 14px;
   }
   .grid{
     display:grid;
@@ -96,10 +115,13 @@
     color: var(--muted);
     margin: 0 0 6px;
   }
-  .field input, .field textarea, .field select{
+  input, textarea, select{
     width:100%;
+    padding:12px 14px;
+    border-radius: 12px;
     border: 1px solid #eee;
-    background:#fff;
+    font-size: 15px;
+    outline:none;
   }
   textarea{min-height: 90px; resize: vertical}
   .actions{
@@ -109,10 +131,23 @@
     margin-top: 12px;
   }
   .run{
+    padding:12px 14px;
+    border-radius:12px;
+    border:none;
     background: var(--pink);
     color:#fff;
+    font-weight:900;
+    cursor:pointer;
   }
-  .run:hover{opacity:.95}
+  .ghost{
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid #ffd0e6;
+    background:#fff3f9;
+    color:#a01355;
+    font-weight:900;
+    cursor:pointer;
+  }
   .out{
     margin-top: 12px;
     border-top: 1px solid var(--line);
@@ -127,734 +162,633 @@
     padding: 12px;
     border-radius: 12px;
   }
-  .hint{
-    font-size: 12px;
-    color: #555;
-    margin-top: 6px;
-  }
-  table{
-    width:100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  th, td{
-    border: 1px solid #eee;
-    padding: 10px;
-    text-align:left;
-    font-size: 14px;
-  }
+  table{width:100%;border-collapse:collapse;margin-top:10px}
+  th,td{border:1px solid #eee;padding:10px;text-align:left;font-size:14px}
   th{background:#fff3f9}
+  .timerBox{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  .timerDisplay{
+    font-size:28px;font-weight:900;
+    padding:10px 14px;border:1px solid #ffd0e6;background:#fff7fb;border-radius:14px;
+    min-width:160px;text-align:center
+  }
   .badge{
     display:inline-block;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid #ffd0e6;
-    background:#fff3f9;
-    font-size:12px;
-    color:#a01355;
-    margin-left: 8px;
-  }
-  .timerBox{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    flex-wrap:wrap;
-    margin-top: 10px;
-  }
-  .timerDisplay{
-    font-size: 28px;
-    font-weight: 800;
-    padding: 10px 14px;
-    border: 1px solid #ffd0e6;
-    background:#fff7fb;
-    border-radius: 14px;
-    min-width: 160px;
-    text-align:center;
+    padding:6px 10px;border-radius:999px;border:1px solid #ffd0e6;background:#fff3f9;
+    font-size:12px;color:#a01355;font-weight:800
   }
 </style>
 </head>
 
 <body>
   <div class="wrap">
-    <h1>SET B — JavaScript Tasks (1–30)</h1>
+    <h1>SET B — JavaScript (1–30)</h1>
+    <p class="sub">30 окошко бар. Қайсысын бассаң — сол тапсырма ашылады.</p>
 
     <div class="panel">
-      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+      <div class="topRow">
         <div>
-          <div style="font-size:18px;font-weight:800">Choose Task (1–30)</div>
-          <div class="meta">Select a task → it opens below → Run to see the answer.</div>
+          <div class="title2">Choose Task (1–30)</div>
+          <div class="hintTop">Click a box → task opens below → Run → output.</div>
         </div>
-        <div class="row" style="margin:0">
-          <select id="taskSelect">
-            <option value="">Select task…</option>
-          </select>
-          <button class="ghost" id="btnReset">Reset</button>
-        </div>
+        <button class="btnReset" id="btnReset">Reset</button>
       </div>
+
+      <div class="gridBtns" id="gridBtns"></div>
 
       <div id="taskCard" class="card" style="display:none"></div>
     </div>
   </div>
 
 <script>
-/* ========= Helpers ========= */
-const $ = (sel) => document.querySelector(sel);
-const taskCard = $("#taskCard");
-const taskSelect = $("#taskSelect");
-
+/* ===== Helpers ===== */
+function $(sel){ return document.querySelector(sel); }
 function esc(s){
-  return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;");
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
-
 function parseCSV(str){
-  // split by comma, trim
-  return String(str ?? "")
+  return String(str||"")
     .split(",")
-    .map(x => x.trim())
-    .filter(x => x.length>0);
+    .map(function(x){ return x.trim(); })
+    .filter(function(x){ return x.length>0; });
 }
 function parseNums(str){
-  const arr = parseCSV(str).map(Number).filter(n => Number.isFinite(n));
-  return arr;
+  return parseCSV(str).map(Number).filter(function(n){ return isFinite(n); });
 }
 function setOut(text){
-  const out = taskCard.querySelector("[data-out]");
-  out.innerHTML = <pre>${esc(text)}</pre>;
+  var out = taskCard.querySelector("[data-out]");
+  if(out) out.innerHTML = "<pre>"+esc(text)+"</pre>";
 }
 function getVal(id){
-  const el = taskCard.querySelector(#${id});
+  var el = taskCard.querySelector("#"+id);
   return el ? el.value : "";
 }
 
-/* ========= Global state for some tasks ========= */
-let signupRows = []; // for task 25/26
-let personObj = null; // for task 27/28
-let timer = { id:null, remaining:0, running:false }; // for task 29
+/* ===== Global State for some tasks ===== */
+var signupRows = [];     // task 25
+var personObj = null;    // task 27/28
+var timerId = null;      // task 29
+var timerRemaining = 0;
+var timerRunning = false;
 
-/* ========= Task definitions ========= */
-const tasks = {
+/* ===== Tasks ===== */
+var tasks = {
   1: {
-    title: "Reverse words in a sentence",
-    desc: "Enter a sentence → it will reverse the word order.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Sentence</label>
-          <input id="t1_sentence" placeholder="e.g., I love JavaScript so much" />
-        </div>
-        <div class="field">
-          <label>Result</label>
-          <input id="t1_result" placeholder="Output will show below" disabled />
-        </div>
-      </div>
-      <div class="actions">
-        <button class="run" data-run="t1">Run</button>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const s = getVal("t1_sentence").trim();
-      const words = s.split(/\s+/).filter(Boolean);
-      const res = words.reverse().join(" ");
+    title:"Reverse words in a sentence",
+    desc:"Enter a sentence → reverse word order.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Sentence</label><input id="t1_sentence" placeholder="I love JavaScript so much"></div>'+
+        '<div class="field"><label>Result</label><input id="t1_result" disabled placeholder="Result..."></div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="1">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var s = getVal("t1_sentence").trim();
+      var words = s.split(/\s+/).filter(Boolean);
+      var res = words.reverse().join(" ");
       taskCard.querySelector("#t1_result").value = res;
       setOut(res || "Empty input.");
     }
   },
 
   2: {
-    title: "Extract first and last character from a string",
-    desc: "Enter a string → get first and last characters.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>String</label>
-          <input id="t2_str" placeholder="e.g., hello" />
-        </div>
-        <div class="field">
-          <label>Output</label>
-          <input id="t2_out" disabled placeholder="first + last" />
-        </div>
-      </div>
-      <div class="actions"><button class="run" data-run="t2">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const s = getVal("t2_str");
-      if (!s) return setOut("Empty string.");
-      const first = s[0];
-      const last = s[s.length-1];
-      const res = First: ${first} | Last: ${last};
-      taskCard.querySelector("#t2_out").value = ${first}${last};
-      setOut(res);
+    title:"Extract first and last character from a string",
+    desc:"Enter string → show first and last character.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>String</label><input id="t2_str" placeholder="hello"></div>'+
+        '<div class="field"><label>Output</label><input id="t2_out" disabled placeholder="first + last"></div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="2">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var s = getVal("t2_str");
+      if(!s){ setOut("Empty string."); return; }
+      var first = s[0], last = s[s.length-1];
+      taskCard.querySelector("#t2_out").value = first + last;
+      setOut("First: "+first+" | Last: "+last);
     }
   },
 
   3: {
-    title: "Find longest word from sentence",
-    desc: "Enter a sentence → find the longest word.",
-    ui: () => `
-      <div class="field">
-        <label>Sentence</label>
-        <input id="t3_sentence" placeholder="e.g., JavaScript is incredibly powerful" />
-      </div>
-      <div class="actions"><button class="run" data-run="t3">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const s = getVal("t3_sentence").trim();
-      const words = s.match(/[A-Za-z0-9']+/g) || [];
-      let best = "";
-      for (const w of words){
-        if (w.length > best.length) best = w;
+    title:"Find longest word from sentence",
+    desc:"Enter sentence → find the longest word.",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Sentence</label><input id="t3_sentence" placeholder="JavaScript is incredibly powerful"></div>'+
+      '<div class="actions"><button class="run" data-run="3">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var s = getVal("t3_sentence").trim();
+      var words = s.match(/[A-Za-z0-9']+/g) || [];
+      var best = "";
+      for(var i=0;i<words.length;i++){
+        if(words[i].length > best.length) best = words[i];
       }
-      setOut(best ? Longest word: ${best} (length ${best.length}) : "No words found.");
+      setOut(best ? ("Longest word: "+best+" (length "+best.length+")") : "No words found.");
     }
   },
 
   4: {
-    title: "Convert string to Title Case",
-    desc: "Enter a string → convert to Title Case.",
-    ui: () => `
-      <div class="field">
-        <label>String</label>
-        <input id="t4_str" placeholder="e.g., hello world from js" />
-      </div>
-      <div class="actions"><button class="run" data-run="t4">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const s = getVal("t4_str");
-      const res = s
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean)
-        .map(w => w[0].toUpperCase() + w.slice(1))
-        .join(" ");
+    title:"Convert string to Title Case",
+    desc:"Enter string → Title Case.",
+    html:function(){
+      return ''+
+      '<div class="field"><label>String</label><input id="t4_str" placeholder="hello world from js"></div>'+
+      '<div class="actions"><button class="run" data-run="4">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var s = getVal("t4_str");
+      var res = s.toLowerCase().split(/\s+/).filter(Boolean).map(function(w){
+        return w.charAt(0).toUpperCase() + w.slice(1);
+      }).join(" ");
       setOut(res || "Empty input.");
     }
   },
 
   5: {
-    title: "Replace a word in a string",
-    desc: "Enter a string, word to find, and replacement.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Original string</label>
-          <textarea id="t5_str" placeholder="e.g., I like apples"></textarea>
-        </div>
-        <div class="field">
-          <label>Find word</label>
-          <input id="t5_find" placeholder="e.g., apples" />
-          <div class="hint">Replaces all matches (case-sensitive).</div>
-          <label style="margin-top:10px">Replace with</label>
-          <input id="t5_rep" placeholder="e.g., bananas" />
-        </div>
-      </div>
-      <div class="actions"><button class="run" data-run="t5">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const s = getVal("t5_str");
-      const f = getVal("t5_find");
-      const r = getVal("t5_rep");
-      if (!f) return setOut("Find word is empty.");
-      const res = s.split(f).join(r);
+    title:"Replace a word in a string",
+    desc:"Replace all occurrences of a word (case-sensitive).",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Original string</label><textarea id="t5_str" placeholder="I like apples"></textarea></div>'+
+        '<div class="field">'+
+          '<label>Find</label><input id="t5_find" placeholder="apples">'+
+          '<label style="margin-top:10px">Replace with</label><input id="t5_rep" placeholder="bananas">'+
+        '</div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="5">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var s = getVal("t5_str");
+      var f = getVal("t5_find");
+      var r = getVal("t5_rep");
+      if(!f){ setOut("Find word is empty."); return; }
+      var res = s.split(f).join(r);
       setOut(res);
     }
   },
 
   6: {
-    title: "Count vowels in a string",
-    desc: "Counts a, e, i, o, u in the input string.",
-    ui: () => `
-      <div class="field">
-        <label>String</label>
-        <input id="t6_str" placeholder="e.g., Gulzhan" />
-      </div>
-      <div class="actions"><button class="run" data-run="t6">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const s = getVal("t6_str");
-      const m = s.match(/[aeiou]/gi);
-      const count = m ? m.length : 0;
-      setOut(Vowels count: ${count});
+    title:"Count vowels in a string",
+    desc:"Counts a,e,i,o,u (case-insensitive).",
+    html:function(){
+      return ''+
+      '<div class="field"><label>String</label><input id="t6_str" placeholder="Gulzhan"></div>'+
+      '<div class="actions"><button class="run" data-run="6">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var s = getVal("t6_str");
+      var m = s.match(/[aeiou]/gi);
+      var count = m ? m.length : 0;
+      setOut("Vowels count: "+count);
     }
   },
 
   7: {
-    title: "Create an array from user popup input",
-    desc: "Uses prompt() to ask for comma-separated values and creates an array.",
-    ui: () => `
-      <div class="actions">
-        <button class="run" data-run="t7">Run (Prompt)</button>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const input = prompt("Enter array values separated by commas:\nExample: a,b,c,10");
-      if (input === null) return setOut("Canceled.");
-      const arr = parseCSV(input);
-      setOut(Array:\n[ ${arr.map(x=>JSON.stringify(x)).join(", ")} ]\nLength: ${arr.length});
+    title:"Create an array from user popup input",
+    desc:"Uses prompt() for comma-separated values → creates array.",
+    html:function(){
+      return ''+
+      '<div class="actions"><button class="run" data-run="7">Run (Prompt)</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var input = prompt("Enter array values separated by commas:\nExample: a,b,c,10");
+      if(input===null){ setOut("Canceled."); return; }
+      var arr = parseCSV(input);
+      setOut("Array: [ "+arr.map(function(x){return JSON.stringify(x)}).join(", ")+" ]\nLength: "+arr.length);
     }
   },
 
   8: {
-    title: "Display third element from array",
-    desc: "Enter comma-separated array → shows 3rd element (index 2).",
-    ui: () => `
-      <div class="field">
-        <label>Array values (comma-separated)</label>
-        <input id="t8_arr" placeholder="e.g., 10,20,30,40" />
-      </div>
-      <div class="actions"><button class="run" data-run="t8">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const arr = parseCSV(getVal("t8_arr"));
-      if (arr.length < 3) return setOut("Array has less than 3 elements.");
-      setOut(Third element: ${arr[2]});
+    title:"Display third element from array",
+    desc:"Enter comma-separated array → shows 3rd element (index 2).",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Array values</label><input id="t8_arr" placeholder="10,20,30,40"></div>'+
+      '<div class="actions"><button class="run" data-run="8">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var arr = parseCSV(getVal("t8_arr"));
+      if(arr.length < 3){ setOut("Array has less than 3 elements."); return; }
+      setOut("Third element: "+arr[2]);
     }
   },
 
   9: {
-    title: "Find last element from array (popup)",
-    desc: "Uses prompt() to input array and displays last element.",
-    ui: () => `
-      <div class="actions">
-        <button class="run" data-run="t9">Run (Prompt)</button>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const input = prompt("Enter array values separated by commas:");
-      if (input === null) return setOut("Canceled.");
-      const arr = parseCSV(input);
-      if (!arr.length) return setOut("Empty array.");
-      setOut(Last element: ${arr[arr.length-1]});
+    title:"Find last element from array (popup)",
+    desc:"Uses prompt() → outputs last element.",
+    html:function(){
+      return ''+
+      '<div class="actions"><button class="run" data-run="9">Run (Prompt)</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var input = prompt("Enter array values separated by commas:");
+      if(input===null){ setOut("Canceled."); return; }
+      var arr = parseCSV(input);
+      if(!arr.length){ setOut("Empty array."); return; }
+      setOut("Last element: "+arr[arr.length-1]);
     }
   },
 
   10: {
-    title: "Find index of a given element in array",
-    desc: "Enter array + element → returns index (0-based).",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Array (comma-separated)</label>
-          <input id="t10_arr" placeholder="e.g., a,b,c,d" />
-        </div>
-        <div class="field">
-          <label>Element to find</label>
-          <input id="t10_el" placeholder="e.g., c" />
-        </div>
-      </div>
-      <div class="actions"><button class="run" data-run="t10">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const arr = parseCSV(getVal("t10_arr"));
-      const el = getVal("t10_el");
-      const idx = arr.indexOf(el);
-      setOut(Index of "${el}": ${idx});
+    title:"Find index of a given element in array",
+    desc:"Enter array + element → shows index (0-based).",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Array</label><input id="t10_arr" placeholder="a,b,c,d"></div>'+
+        '<div class="field"><label>Element</label><input id="t10_el" placeholder="c"></div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="10">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var arr = parseCSV(getVal("t10_arr"));
+      var el = getVal("t10_el");
+      var idx = arr.indexOf(el);
+      setOut('Index of "'+el+'": '+idx);
     }
   },
 
   11: {
-    title: "Apply map() to square each element",
-    desc: "Enter numbers → squares each element using map().",
-    ui: () => `
-      <div class="field">
-        <label>Numbers (comma-separated)</label>
-        <input id="t11_nums" placeholder="e.g., 1,2,3,4" />
-      </div>
-      <div class="actions"><button class="run" data-run="t11">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const nums = parseNums(getVal("t11_nums"));
-      const squared = nums.map(n => n*n);
-      setOut(Input: [${nums.join(", ")}]\nSquared: [${squared.join(", ")}]);
+    title:"Apply map() to square each element",
+    desc:"Enter numbers → squares with map().",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Numbers</label><input id="t11_nums" placeholder="1,2,3,4"></div>'+
+      '<div class="actions"><button class="run" data-run="11">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var nums = parseNums(getVal("t11_nums"));
+      var sq = nums.map(function(n){ return n*n; });
+      setOut("Input: ["+nums.join(", ")+"]\nSquared: ["+sq.join(", ")+"]");
     }
   },
 
   12: {
-    title: "Sort array in ascending order",
-    desc: "Enter numbers → sorts ascending.",
-    ui: () => `
-      <div class="field">
-        <label>Numbers (comma-separated)</label>
-        <input id="t12_nums" placeholder="e.g., 9,2,10,1" />
-      </div>
-      <div class="actions"><button class="run" data-run="t12">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const nums = parseNums(getVal("t12_nums"));
-      const sorted = [...nums].sort((a,b)=>a-b);
-      setOut(Sorted: [${sorted.join(", ")}]);
+    title:"Sort array in ascending order",
+    desc:"Enter numbers → sorts ascending.",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Numbers</label><input id="t12_nums" placeholder="9,2,10,1"></div>'+
+      '<div class="actions"><button class="run" data-run="12">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var nums = parseNums(getVal("t12_nums"));
+      var sorted = nums.slice().sort(function(a,b){ return a-b; });
+      setOut("Sorted: ["+sorted.join(", ")+"]");
     }
   },
 
   13: {
-    title: "Use splice to replace elements",
-    desc: "Splice(start, deleteCount, ...items). Shows before and after.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Array (comma-separated)</label>
-          <input id="t13_arr" placeholder="e.g., a,b,c,d,e" />
-        </div>
-        <div class="field">
-          <label>Start index</label>
-          <input id="t13_start" type="number" value="1" />
-          <label style="margin-top:10px">Delete count</label>
-          <input id="t13_del" type="number" value="2" />
-          <label style="margin-top:10px">Insert items (comma-separated)</label>
-          <input id="t13_items" placeholder="e.g., X,Y" />
-        </div>
-      </div>
-      <div class="actions"><button class="run" data-run="t13">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const arr = parseCSV(getVal("t13_arr"));
-      const start = Number(getVal("t13_start"));
-      const del = Number(getVal("t13_del"));
-      const items = parseCSV(getVal("t13_items"));
-      const before = [...arr];
-      const removed = arr.splice(start, del, ...items);
-      setOut(
-        Before: [${before.join(", ")}]\nRemoved: [${removed.join(", ")}]\nAfter:  [${arr.join(", ")}]
-      );
+    title:"Use splice to replace elements",
+    desc:"splice(start, deleteCount, ...items).",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Array</label><input id="t13_arr" placeholder="a,b,c,d,e"></div>'+
+        '<div class="field">'+
+          '<label>Start index</label><input id="t13_start" type="number" value="1">'+
+          '<label style="margin-top:10px">Delete count</label><input id="t13_del" type="number" value="2">'+
+          '<label style="margin-top:10px">Insert items</label><input id="t13_items" placeholder="X,Y">'+
+        '</div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="13">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var arr = parseCSV(getVal("t13_arr"));
+      var start = Number(getVal("t13_start"));
+      var del = Number(getVal("t13_del"));
+      var items = parseCSV(getVal("t13_items"));
+      var before = arr.slice();
+      var removed = arr.splice(start, del, items[0], items[1], items[2]).filter(function(x){return x!==undefined});
+      // better: use apply-like, but keep safe:
+      // We'll re-run properly:
+      arr = before.slice();
+      removed = arr.splice(start, del);
+      // insert items manually:
+      for(var i=items.length-1;i>=0;i--){
+        arr.splice(start, 0, items[i]);
+      }
+      setOut("Before: ["+before.join(", ")+"]\nRemoved: ["+removed.join(", ")+"]\nAfter:  ["+arr.join(", ")+"]");
     }
   },
 
   14: {
-    title: "Use splice to delete + insert simultaneously",
-    desc: "Same splice() idea: delete some and insert new items at same position.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Array (comma-separated)</label>
-          <input id="t14_arr" placeholder="e.g., 1,2,3,4,5" />
-        </div>
-        <div class="field">
-          <label>Start index</label>
-          <input id="t14_start" type="number" value="2" />
-          <label style="margin-top:10px">Delete count</label>
-          <input id="t14_del" type="number" value="2" />
-          <label style="margin-top:10px">Insert items (comma-separated)</label>
-          <input id="t14_items" placeholder="e.g., 99,100" />
-        </div>
-      </div>
-      <div class="actions"><button class="run" data-run="t14">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const arr = parseCSV(getVal("t14_arr"));
-      const start = Number(getVal("t14_start"));
-      const del = Number(getVal("t14_del"));
-      const items = parseCSV(getVal("t14_items"));
-      const before = [...arr];
-      const removed = arr.splice(start, del, ...items);
-      setOut(Before: [${before.join(", ")}]\nDelete: [${removed.join(", ")}]\nInsert: [${items.join(", ")}]\nAfter:  [${arr.join(", ")}]);
+    title:"Use splice to delete + insert simultaneously",
+    desc:"Delete some items and insert new items at same position.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Array</label><input id="t14_arr" placeholder="1,2,3,4,5"></div>'+
+        '<div class="field">'+
+          '<label>Start index</label><input id="t14_start" type="number" value="2">'+
+          '<label style="margin-top:10px">Delete count</label><input id="t14_del" type="number" value="2">'+
+          '<label style="margin-top:10px">Insert items</label><input id="t14_items" placeholder="99,100">'+
+        '</div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="14">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var arr = parseCSV(getVal("t14_arr"));
+      var start = Number(getVal("t14_start"));
+      var del = Number(getVal("t14_del"));
+      var items = parseCSV(getVal("t14_items"));
+      var before = arr.slice();
+      var removed = arr.splice(start, del);
+      // insert:
+      for(var i=items.length-1;i>=0;i--){
+        arr.splice(start, 0, items[i]);
+      }
+      setOut("Before: ["+before.join(", ")+"]\nDeleted: ["+removed.join(", ")+"]\nInserted: ["+items.join(", ")+"]\nAfter:  ["+arr.join(", ")+"]");
     }
   },
 
   15: {
-    title: "Arithmetic operations based on user choice",
-    desc: "Choose operation and compute result.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Number A</label>
-          <input id="t15_a" type="number" placeholder="e.g., 10" />
-        </div>
-        <div class="field">
-          <label>Number B</label>
-          <input id="t15_b" type="number" placeholder="e.g., 3" />
-        </div>
-      </div>
-      <div class="field" style="margin-top:10px">
-        <label>Operation</label>
-        <select id="t15_op">
-          <option value="+">+</option>
-          <option value="-">-</option>
-          <option value=""></option>
-          <option value="/">/</option>
-          <option value="%">%</option>
-          <option value="pow">power (a^b)</option>
-        </select>
-      </div>
-      <div class="actions"><button class="run" data-run="t15">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const a = Number(getVal("t15_a"));
-      const b = Number(getVal("t15_b"));
-      const op = getVal("t15_op");
-      if (!Number.isFinite(a) || !Number.isFinite(b)) return setOut("Enter valid numbers.");
-      let res;
-      switch(op){
-        case "+": res = a + b; break;
-        case "-": res = a - b; break;
-        case "*": res = a * b; break;
-        case "/": res = (b===0) ? "Division by zero!" : (a / b); break;
-        case "%": res = (b===0) ? "Modulo by zero!" : (a % b); break;
-        case "pow": res = a ** b; break;
-        default: res = "Unknown operation";
-      }
-      setOut(Result: ${res});
+    title:"Arithmetic operations based on user choice",
+    desc:"Choose operation and calculate result.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Number A</label><input id="t15_a" type="number" placeholder="10"></div>'+
+        '<div class="field"><label>Number B</label><input id="t15_b" type="number" placeholder="3"></div>'+
+      '</div>'+
+      '<div class="field" style="margin-top:10px">'+
+        '<label>Operation</label>'+
+        '<select id="t15_op">'+
+          '<option value="+">+</option>'+
+          '<option value="-">-</option>'+
+          '<option value=""></option>'+
+          '<option value="/">/</option>'+
+          '<option value="%">%</option>'+
+          '<option value="pow">power (a^b)</option>'+
+        '</select>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="15">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var a = Number(getVal("t15_a"));
+      var b = Number(getVal("t15_b"));
+      var op = getVal("t15_op");
+      if(!isFinite(a) || !isFinite(b)){ setOut("Enter valid numbers."); return; }
+      var res;
+      if(op==="+") res = a+b;
+      else if(op==="-") res = a-b;
+      else if(op==="*") res = a*b;
+      else if(op==="/") res = (b===0) ? "Division by zero!" : (a/b);
+      else if(op==="%") res = (b===0) ? "Modulo by zero!" : (a%b);
+      else if(op==="pow") res = Math.pow(a,b);
+      else res = "Unknown operation";
+      setOut("Result: "+res);
     }
   },
 
   16: {
-    title: "Function: calculate factorial",
-    desc: "Enter n → factorial(n).",
-    ui: () => `
-      <div class="field">
-        <label>n (integer ≥ 0)</label>
-        <input id="t16_n" type="number" placeholder="e.g., 5" />
-      </div>
-      <div class="actions"><button class="run" data-run="t16">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const n = Number(getVal("t16_n"));
-      if (!Number.isInteger(n) || n < 0) return setOut("n must be an integer ≥ 0.");
-      let f = 1;
-      for(let i=2;i<=n;i++) f *= i;
-      setOut(${n}! = ${f});
+    title:"Function: calculate factorial",
+    desc:"Enter n → factorial(n).",
+    html:function(){
+      return ''+
+      '<div class="field"><label>n (integer ≥ 0)</label><input id="t16_n" type="number" placeholder="5"></div>'+
+      '<div class="actions"><button class="run" data-run="16">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var n = Number(getVal("t16_n"));
+      if(!(Number.isInteger(n) && n>=0)){ setOut("n must be an integer ≥ 0."); return; }
+      var f=1;
+      for(var i=2;i<=n;i++) f*=i;
+      setOut(n+"! = "+f);
     }
   },
 
   17: {
-    title: "Function: check even/odd",
-    desc: "Enter integer → even or odd.",
-    ui: () => `
-      <div class="field">
-        <label>Integer</label>
-        <input id="t17_n" type="number" placeholder="e.g., 7" />
-      </div>
-      <div class="actions"><button class="run" data-run="t17">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const n = Number(getVal("t17_n"));
-      if (!Number.isInteger(n)) return setOut("Enter an integer.");
-      setOut(${n} is ${n%2===0 ? "EVEN" : "ODD"}.);
+    title:"Function: check even/odd",
+    desc:"Enter integer → even or odd.",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Integer</label><input id="t17_n" type="number" placeholder="7"></div>'+
+      '<div class="actions"><button class="run" data-run="17">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var n = Number(getVal("t17_n"));
+      if(!Number.isInteger(n)){ setOut("Enter an integer."); return; }
+      setOut(n+" is "+(n%2===0 ? "EVEN" : "ODD")+".");
     }
   },
 
   18: {
-    title: "Function: find max of 3 numbers",
-    desc: "Enter 3 numbers → shows maximum.",
-    ui: () => `
-      <div class="grid">
-        <div class="field"><label>A</label><input id="t18_a" type="number" /></div>
-        <div class="field"><label>B</label><input id="t18_b" type="number" /></div>
-        <div class="field"><label>C</label><input id="t18_c" type="number" /></div>
-      </div>
-      <div class="actions"><button class="run" data-run="t18">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const a = Number(getVal("t18_a"));
-      const b = Number(getVal("t18_b"));
-      const c = Number(getVal("t18_c"));
-      if (![a,b,c].every(Number.isFinite)) return setOut("Enter all 3 numbers.");
-      setOut(Max = ${Math.max(a,b,c)});
+    title:"Function: find max of 3 numbers",
+    desc:"Enter 3 numbers → show maximum.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>A</label><input id="t18_a" type="number"></div>'+
+        '<div class="field"><label>B</label><input id="t18_b" type="number"></div>'+
+        '<div class="field"><label>C</label><input id="t18_c" type="number"></div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="18">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var a = Number(getVal("t18_a"));
+      var b = Number(getVal("t18_b"));
+      var c = Number(getVal("t18_c"));
+      if(!isFinite(a)||!isFinite(b)||!isFinite(c)){ setOut("Enter all 3 numbers."); return; }
+      setOut("Max = "+Math.max(a,b,c));
     }
   },
 
   19: {
-    title: "Function: sum of array values",
-    desc: "Enter numbers → sum them.",
-    ui: () => `
-      <div class="field">
-        <label>Numbers (comma-separated)</label>
-        <input id="t19_nums" placeholder="e.g., 1,2,3,4" />
-      </div>
-      <div class="actions"><button class="run" data-run="t19">Run</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const nums = parseNums(getVal("t19_nums"));
-      const sum = nums.reduce((acc,n)=>acc+n,0);
-      setOut(Sum = ${sum});
+    title:"Function: sum of array values",
+    desc:"Enter numbers → sum them.",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Numbers</label><input id="t19_nums" placeholder="1,2,3,4"></div>'+
+      '<div class="actions"><button class="run" data-run="19">Run</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var nums = parseNums(getVal("t19_nums"));
+      var sum = nums.reduce(function(acc,n){ return acc+n; },0);
+      setOut("Sum = "+sum);
     }
   },
 
   20: {
-    title: "Popup: allow only 10 digits input",
-    desc: "Uses prompt() and checks that input is exactly 10 digits.",
-    ui: () => `
-      <div class="actions">
-        <button class="run" data-run="t20">Run (Prompt)</button>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const val = prompt("Enter ONLY 10 digits (example: 1234567890):");
-      if (val === null) return setOut("Canceled.");
-      const ok = /^\d{10}$/.test(val.trim());
-      setOut(ok ? ✅ Valid 10-digit input: ${val.trim()} : ❌ Invalid. You entered: "${val}");
+    title:"Popup: allow only 10 digits input",
+    desc:"Uses prompt() and validates exactly 10 digits.",
+    html:function(){
+      return ''+
+      '<div class="actions"><button class="run" data-run="20">Run (Prompt)</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var v = prompt("Enter ONLY 10 digits (example: 1234567890):");
+      if(v===null){ setOut("Canceled."); return; }
+      v = (v||"").trim();
+      var ok = /^\d{10}$/.test(v);
+      setOut(ok ? ("✅ Valid: "+v) : ('❌ Invalid: "'+v+'"'));
     }
   },
 
   21: {
-    title: "Popup: detect numeric vs string and apply allowed operations",
-    desc: "If numeric → choose +,-,*,/ with another number. If string → choose uppercase/lowercase/reverse.",
-    ui: () => `
-      <div class="actions">
-        <button class="run" data-run="t21">Run (Prompt)</button>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const v = prompt("Enter a value (number or text):");
-      if (v === null) return setOut("Canceled.");
-      const trimmed = v.trim();
-
-      const isNum = trimmed !== "" && Number.isFinite(Number(trimmed));
-      if (isNum){
-        const a = Number(trimmed);
-        const op = prompt('Numeric detected.\nChoose operation: +  -  *  /');
-        if (op === null) return setOut("Canceled.");
-        const bStr = prompt("Enter second number:");
-        if (bStr === null) return setOut("Canceled.");
-        const b = Number(bStr);
-        if (!Number.isFinite(b)) return setOut("Second input is not a number.");
-
-        let res;
-        if (op === "+") res = a + b;
-        else if (op === "-") res = a - b;
-        else if (op === "*") res = a * b;
-        else if (op === "/") res = (b===0) ? "Division by zero!" : (a / b);
-        else return setOut("Unknown operation.");
-
-        setOut(Number mode:\n${a} ${op} ${b} = ${res});
+    title:"Popup: detect numeric vs string and apply allowed operations",
+    desc:"Number → arithmetic with second number. String → uppercase/lowercase/reverse.",
+    html:function(){
+      return ''+
+      '<div class="actions"><button class="run" data-run="21">Run (Prompt)</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var v = prompt("Enter a value (number or text):");
+      if(v===null){ setOut("Canceled."); return; }
+      v = (v||"").trim();
+      var isNum = (v!=="" && isFinite(Number(v)));
+      if(isNum){
+        var a = Number(v);
+        var op = prompt("Numeric detected.\nChoose operation: +  -  *  /");
+        if(op===null){ setOut("Canceled."); return; }
+        var bStr = prompt("Enter second number:");
+        if(bStr===null){ setOut("Canceled."); return; }
+        var b = Number(bStr);
+        if(!isFinite(b)){ setOut("Second input is not a number."); return; }
+        var res;
+        if(op==="+") res = a+b;
+        else if(op==="-") res = a-b;
+        else if(op==="*") res = a*b;
+        else if(op==="/") res = (b===0 ? "Division by zero!" : (a/b));
+        else { setOut("Unknown operation."); return; }
+        setOut("Number mode:\n"+a+" "+op+" "+b+" = "+res);
       } else {
-        const choice = prompt("String detected.\nChoose: 1) uppercase  2) lowercase  3) reverse");
-        if (choice === null) return setOut("Canceled.");
-        let res;
-        if (choice === "1") res = trimmed.toUpperCase();
-        else if (choice === "2") res = trimmed.toLowerCase();
-        else if (choice === "3") res = trimmed.split("").reverse().join("");
-        else return setOut("Unknown choice.");
-        setOut(String mode:\nResult: ${res});
+        var c = prompt("String detected.\nChoose: 1) uppercase  2) lowercase  3) reverse");
+        if(c===null){ setOut("Canceled."); return; }
+        var resS;
+        if(c==="1") resS = v.toUpperCase();
+        else if(c==="2") resS = v.toLowerCase();
+        else if(c==="3") resS = v.split("").reverse().join("");
+        else { setOut("Unknown choice."); return; }
+        setOut("String mode:\nResult: "+resS);
       }
     }
   },
 
   22: {
-    title: "Validate: password min length rule",
-    desc: "Checks if password length >= minimum.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Password</label>
-          <input id="t22_pass" type="password" placeholder="Enter password" />
-        </div>
-        <div class="field">
-          <label>Min length</label>
-          <input id="t22_min" type="number" value="8" />
-        </div>
-      </div>
-      <div class="actions"><button class="run" data-run="t22">Validate</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const p = getVal("t22_pass");
-      const min = Number(getVal("t22_min"));
-      if (!Number.isInteger(min) || min<1) return setOut("Min length must be a positive integer.");
-      setOut(p.length >= min ? ✅ Valid (length ${p.length} >= ${min}) : ❌ Invalid (length ${p.length} < ${min}));
+    title:"Validate: password min length rule",
+    desc:"Checks if password length >= min length.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Password</label><input id="t22_pass" type="password" placeholder="Enter password"></div>'+
+        '<div class="field"><label>Min length</label><input id="t22_min" type="number" value="8"></div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="22">Validate</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var p = getVal("t22_pass");
+      var min = Number(getVal("t22_min"));
+      if(!Number.isInteger(min) || min<1){ setOut("Min length must be positive integer."); return; }
+      setOut(p.length>=min ? ("✅ Valid (length "+p.length+" >= "+min+")") : ("❌ Invalid (length "+p.length+" < "+min+")"));
     }
   },
 
   23: {
-    title: "Validate: required field not empty",
-    desc: "Checks if required field has any text (trim).",
-    ui: () => `
-      <div class="field">
-        <label>Required field</label>
-        <input id="t23_req" placeholder="Type something..." />
-      </div>
-      <div class="actions"><button class="run" data-run="t23">Validate</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const v = getVal("t23_req").trim();
+    title:"Validate: required field not empty",
+    desc:"Checks if required field has value (trim).",
+    html:function(){
+      return ''+
+      '<div class="field"><label>Required field</label><input id="t23_req" placeholder="Type something..."></div>'+
+      '<div class="actions"><button class="run" data-run="23">Validate</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var v = getVal("t23_req").trim();
       setOut(v ? "✅ OK: field is not empty." : "❌ Error: field is empty.");
     }
   },
 
   24: {
-    title: "Signup form with submit/reset",
-    desc: "Simple signup form validation. Submit shows message; Reset clears.",
-    ui: () => `
-      <form id="t24_form">
-        <div class="grid">
-          <div class="field"><label>Full name</label><input id="t24_name" /></div>
-          <div class="field"><label>Email</label><input id="t24_email" type="email" /></div>
-          <div class="field"><label>Password</label><input id="t24_pass" type="password" /></div>
-        </div>
-        <div class="actions">
-          <button class="run" type="submit">Submit</button>
-          <button class="ghost" type="reset">Reset</button>
-        </div>
-      </form>
-      <div class="out" data-out></div>
-    `,
-    run: () => {}, // handled by form events
-    afterRender: () => {
-      const form = taskCard.querySelector("#t24_form");
-      form.addEventListener("submit", (e)=>{
+    title:"Signup form with submit/reset",
+    desc:"Submit shows result, Reset clears output.",
+    html:function(){
+      return ''+
+      '<form id="t24_form">'+
+        '<div class="grid">'+
+          '<div class="field"><label>Full name</label><input id="t24_name"></div>'+
+          '<div class="field"><label>Email</label><input id="t24_email" type="email"></div>'+
+          '<div class="field"><label>Password</label><input id="t24_pass" type="password"></div>'+
+        '</div>'+
+        '<div class="actions">'+
+          '<button class="run" type="submit">Submit</button>'+
+          '<button class="ghost" type="reset">Reset</button>'+
+        '</div>'+
+      '</form>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){},
+    after:function(){
+      var form = taskCard.querySelector("#t24_form");
+      form.addEventListener("submit", function(e){
         e.preventDefault();
-        const name = getVal("t24_name").trim();
-        const email = getVal("t24_email").trim();
-        const pass = getVal("t24_pass");
-        if (!name || !email || !pass) return setOut("❌ Please fill all fields.");
-        setOut(✅ Signup OK!\nName: ${name}\nEmail: ${email}\nPassword length: ${pass.length});
+        var name = getVal("t24_name").trim();
+        var email = getVal("t24_email").trim();
+        var pass = getVal("t24_pass");
+        if(!name || !email || !pass){ setOut("❌ Please fill all fields."); return; }
+        setOut("✅ Signup OK!\nName: "+name+"\nEmail: "+email+"\nPassword length: "+pass.length);
       });
-      form.addEventListener("reset", ()=>{
-        setTimeout(()=>setOut("Output cleared."),0);
+      form.addEventListener("reset", function(){
+        setTimeout(function(){ setOut(""); },0);
       });
     }
   },
 
   25: {
-    title: "Display form output in a table format",
-    desc: "Enter values → Add to table.",
-    ui: () => `
-      <div class="grid">
-        <div class="field"><label>Name</label><input id="t25_name" /></div>
-        <div class="field"><label>Email</label><input id="t25_email" type="email" /></div>
-        <div class="field"><label>Phone</label><input id="t25_phone" placeholder="optional" /></div>
-      </div>
-      <div class="actions">
-        <button class="run" data-run="t25">Add to Table</button>
-        <button class="ghost" id="t25_resetTable">Clear Table</button>
-      </div>
-      <div id="t25_tableWrap"></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const name = getVal("t25_name").trim();
-      const email = getVal("t25_email").trim();
-      const phone = getVal("t25_phone").trim();
-      if (!name || !email) return setOut("❌ Name and Email are required.");
-      signupRows.push({ name, email, phone });
+    title:"Display form output in a table format",
+    desc:"Add data to table. Clear table button included.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Name</label><input id="t25_name"></div>'+
+        '<div class="field"><label>Email</label><input id="t25_email" type="email"></div>'+
+        '<div class="field"><label>Phone</label><input id="t25_phone" placeholder="optional"></div>'+
+      '</div>'+
+      '<div class="actions">'+
+        '<button class="run" data-run="25">Add to Table</button>'+
+        '<button class="ghost" id="t25_clear">Clear Table</button>'+
+      '</div>'+
+      '<div id="t25_tableWrap"></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var name = getVal("t25_name").trim();
+      var email = getVal("t25_email").trim();
+      var phone = getVal("t25_phone").trim();
+      if(!name || !email){ setOut("❌ Name and Email are required."); return; }
+      signupRows.push({name:name, email:email, phone:phone});
       renderSignupTable();
       setOut("✅ Row added.");
     },
-    afterRender: () => {
-      taskCard.querySelector("#t25_resetTable").addEventListener("click", ()=>{
+    after:function(){
+      taskCard.querySelector("#t25_clear").addEventListener("click", function(){
         signupRows = [];
         renderSignupTable();
         setOut("Table cleared.");
@@ -864,277 +798,284 @@ const tasks = {
   },
 
   26: {
-    title: "Clear output on reset",
-    desc: "Demonstrates that reset clears output.",
-    ui: () => `
-      <form id="t26_form">
-        <div class="field">
-          <label>Type something</label>
-          <input id="t26_text" placeholder="write here..." />
-        </div>
-        <div class="actions">
-          <button class="run" type="submit">Show Output</button>
-          <button class="ghost" type="reset">Reset</button>
-        </div>
-      </form>
-      <div class="out" data-out></div>
-    `,
-    run: () => {},
-    afterRender: () => {
-      const form = taskCard.querySelector("#t26_form");
-      form.addEventListener("submit",(e)=>{
+    title:"Clear output on reset",
+    desc:"Submit shows output, Reset clears output.",
+    html:function(){
+      return ''+
+      '<form id="t26_form">'+
+        '<div class="field"><label>Type something</label><input id="t26_text" placeholder="write here..."></div>'+
+        '<div class="actions">'+
+          '<button class="run" type="submit">Show Output</button>'+
+          '<button class="ghost" type="reset">Reset</button>'+
+        '</div>'+
+      '</form>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){},
+    after:function(){
+      var form = taskCard.querySelector("#t26_form");
+      form.addEventListener("submit", function(e){
         e.preventDefault();
         setOut(getVal("t26_text"));
       });
-      form.addEventListener("reset",()=>{
-        setTimeout(()=>setOut(""),0); // clear output
+      form.addEventListener("reset", function(){
+        setTimeout(function(){ setOut(""); },0);
       });
     }
   },
 
   27: {
-    title: "Create person object and update age using input",
-    desc: "Creates person object {name, age} and updates age.",
-    ui: () => `
-      <div class="grid">
-        <div class="field"><label>Name</label><input id="t27_name" placeholder="e.g., Gulzhan" /></div>
-        <div class="field"><label>Age</label><input id="t27_age" type="number" placeholder="e.g., 19" /></div>
-        <div class="field"><label>New age (update)</label><input id="t27_newAge" type="number" placeholder="e.g., 20" /></div>
-      </div>
-      <div class="actions"><button class="run" data-run="t27">Create/Update</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      const name = getVal("t27_name").trim();
-      const age = Number(getVal("t27_age"));
-      const newAge = Number(getVal("t27_newAge"));
-      if (!name || !Number.isFinite(age)) return setOut("Enter valid name and age.");
-      personObj = { name, age };
-      if (Number.isFinite(newAge)) personObj.age = newAge;
-      setOut(✅ Person saved.\n${JSON.stringify(personObj, null, 2)});
+    title:"Create person object and update age using input",
+    desc:"Creates {name, age}, then updates age if newAge given.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field"><label>Name</label><input id="t27_name" placeholder="Gulzhan"></div>'+
+        '<div class="field"><label>Age</label><input id="t27_age" type="number" placeholder="19"></div>'+
+        '<div class="field"><label>New age (update)</label><input id="t27_newAge" type="number" placeholder="20"></div>'+
+      '</div>'+
+      '<div class="actions"><button class="run" data-run="27">Create/Update</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      var name = getVal("t27_name").trim();
+      var age = Number(getVal("t27_age"));
+      var newAgeStr = getVal("t27_newAge");
+      if(!name || !isFinite(age)){ setOut("Enter valid name and age."); return; }
+      personObj = { name:name, age:age };
+      if(newAgeStr!=="" && isFinite(Number(newAgeStr))){
+        personObj.age = Number(newAgeStr);
+      }
+      setOut("✅ Person saved:\n"+JSON.stringify(personObj,null,2));
     }
   },
 
   28: {
-    title: "Display object after update",
-    desc: "Shows the current person object from Task 27.",
-    ui: () => `
-      <div class="actions"><button class="run" data-run="t28">Show Person Object</button></div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {
-      if (!personObj) return setOut("No person object yet. Do Task 27 first.");
-      setOut(JSON.stringify(personObj, null, 2));
+    title:"Display object after update",
+    desc:"Shows person object from Task 27.",
+    html:function(){
+      return ''+
+      '<div class="actions"><button class="run" data-run="28">Show Person Object</button></div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){
+      if(!personObj){ setOut("No person object yet. Do Task 27 first."); return; }
+      setOut(JSON.stringify(personObj,null,2));
     }
   },
 
   29: {
-    title: "Countdown timer using setInterval with Start/Pause/Reset",
-    desc: "Enter seconds → Start / Pause / Reset.",
-    ui: () => `
-      <div class="grid">
-        <div class="field">
-          <label>Start seconds</label>
-          <input id="t29_sec" type="number" value="10" min="0"/>
-          <div class="hint">Reset uses this value.</div>
-        </div>
-        <div class="field">
-          <label>Display</label>
-          <div class="timerBox">
-            <div class="timerDisplay" id="t29_display">00:00</div>
-            <span class="badge" id="t29_state">STOPPED</span>
-          </div>
-        </div>
-      </div>
-      <div class="actions">
-        <button class="run" id="t29_start">Start</button>
-        <button class="ghost" id="t29_pause">Pause</button>
-        <button class="ghost" id="t29_reset">Reset</button>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {},
-    afterRender: () => {
-      const disp = taskCard.querySelector("#t29_display");
-      const state = taskCard.querySelector("#t29_state");
-
+    title:"Countdown timer using setInterval with Start/Pause/Reset",
+    desc:"Enter seconds → Start / Pause / Reset.",
+    html:function(){
+      return ''+
+      '<div class="grid">'+
+        '<div class="field">'+
+          '<label>Start seconds</label><input id="t29_sec" type="number" value="10" min="0">'+
+          '<div style="font-size:12px;color:#555;margin-top:6px">Reset uses this value.</div>'+
+        '</div>'+
+        '<div class="field">'+
+          '<label>Display</label>'+
+          '<div class="timerBox">'+
+            '<div class="timerDisplay" id="t29_display">00:00</div>'+
+            '<span class="badge" id="t29_state">STOPPED</span>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="actions">'+
+        '<button class="run" id="t29_start">Start</button>'+
+        '<button class="ghost" id="t29_pause">Pause</button>'+
+        '<button class="ghost" id="t29_reset">Reset</button>'+
+      '</div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){},
+    after:function(){
       function fmt(sec){
         sec = Math.max(0, Math.floor(sec));
-        const m = String(Math.floor(sec/60)).padStart(2,"0");
-        const s = String(sec%60).padStart(2,"0");
-        return ${m}:${s};
+        var m = String(Math.floor(sec/60)).padStart(2,"0");
+        var s = String(sec%60).padStart(2,"0");
+        return m+":"+s;
       }
       function sync(){
-        disp.textContent = fmt(timer.remaining);
-        state.textContent = timer.running ? "RUNNING" : "STOPPED";
+        $("#t29_display").textContent = fmt(timerRemaining);
+        $("#t29_state").textContent = timerRunning ? "RUNNING" : "STOPPED";
+      }
+      function pause(){
+        timerRunning = false;
+        if(timerId) clearInterval(timerId);
+        timerId = null;
+        sync();
       }
       function start(){
-        if (timer.running) return;
-        timer.running = true;
-        state.textContent = "RUNNING";
-        timer.id = setInterval(()=>{
-          timer.remaining--;
+        if(timerRunning) return;
+        timerRunning = true;
+        sync();
+        timerId = setInterval(function(){
+          timerRemaining--;
           sync();
-          if (timer.remaining <= 0){
-            timer.remaining = 0;
+          if(timerRemaining <= 0){
+            timerRemaining = 0;
             pause();
             setOut("✅ Time up!");
           }
         }, 1000);
       }
-      function pause(){
-        timer.running = false;
-        if (timer.id) clearInterval(timer.id);
-        timer.id = null;
-        sync();
-      }
       function reset(){
         pause();
-        const s = Number(getVal("t29_sec"));
-        timer.remaining = Number.isFinite(s) ? Math.max(0, Math.floor(s)) : 0;
+        var s = Number(getVal("t29_sec"));
+        timerRemaining = isFinite(s) ? Math.max(0, Math.floor(s)) : 0;
         sync();
         setOut("Reset done.");
       }
 
-      taskCard.querySelector("#t29_start").addEventListener("click", ()=>{
-        if (!timer.remaining) {
-          const s = Number(getVal("t29_sec"));
-          timer.remaining = Number.isFinite(s) ? Math.max(0, Math.floor(s)) : 0;
+      $("#t29_start").addEventListener("click", function(){
+        if(timerRemaining<=0){
+          var s = Number(getVal("t29_sec"));
+          timerRemaining = isFinite(s) ? Math.max(0, Math.floor(s)) : 0;
         }
         sync();
         start();
       });
-      taskCard.querySelector("#t29_pause").addEventListener("click", pause);
-      taskCard.querySelector("#t29_reset").addEventListener("click", reset);
+      $("#t29_pause").addEventListener("click", pause);
+      $("#t29_reset").addEventListener("click", reset);
 
       // init
-      timer.remaining = Math.max(0, Math.floor(Number(getVal("t29_sec")) || 0));
+      timerRemaining = Math.max(0, Math.floor(Number(getVal("t29_sec")) || 0));
+      timerRunning = false;
       sync();
     }
   },
 
   30: {
-    title: "Hover event: change button style on mouse over",
-    desc: "Hover over the button to see style change.",
-    ui: () => `
-      <div class="actions">
-        <button class="run" id="t30_btn">Hover Me</button>
-        <span class="badge">Mouseover / Mouseout</span>
-      </div>
-      <div class="out" data-out></div>
-    `,
-    run: () => {},
-    afterRender: () => {
-      const btn = taskCard.querySelector("#t30_btn");
-      btn.addEventListener("mouseover", ()=>{
-        btn.style.transform = "scale(1.05)";
+    title:"Hover event: change button style on mouse over",
+    desc:"Hover button to change style (mouseover/mouseout).",
+    html:function(){
+      return ''+
+      '<div class="actions">'+
+        '<button class="run" id="t30_btn">Hover Me</button>'+
+        '<span class="badge">mouseover / mouseout</span>'+
+      '</div>'+
+      '<div class="out" data-out></div>';
+    },
+    run:function(){},
+    after:function(){
+      var btn = $("#t30_btn");
+      btn.addEventListener("mouseover", function(){
+        btn.style.transform = "scale(1.06)";
         btn.style.boxShadow = "0 10px 22px rgba(255,79,163,.35)";
         btn.style.filter = "brightness(1.05)";
         setOut("Mouse is OVER the button ✅");
       });
-      btn.addEventListener("mouseout", ()=>{
+      btn.addEventListener("mouseout", function(){
         btn.style.transform = "scale(1)";
         btn.style.boxShadow = "none";
         btn.style.filter = "none";
         setOut("Mouse left the button.");
       });
     }
-  },
+  }
 };
 
-/* ========= Missing tasks? (We must include ALL 1-30) =========
-We already have all 1..30 keys except 24-30 yes. Good.
-But task list includes 24=signup,25=table,26=clear output,27-28 person object,29 timer,30 hover.
-Done.
+/* ===== FIX tasks 13 splice properly (simple + correct) =====
+We already built safe behavior; keep as is.
 */
 
-/* ========= Render Task ========= */
-function renderTask(n){
-  const t = tasks[n];
-  if (!t) return;
+/* ===== UI Build (30 boxes) ===== */
+var gridBtns = $("#gridBtns");
+var taskCard = $("#taskCard");
+var activeBtn = null;
+
+for(var i=1;i<=30;i++){
+  var b = document.createElement("button");
+  b.className = "taskBtn";
+  b.textContent = "Task " + i;
+  (function(n, btn){
+    btn.addEventListener("click", function(){
+      openTask(n, btn);
+    });
+  })(i, b);
+  gridBtns.appendChild(b);
+}
+
+function openTask(n, btn){
+  // active style
+  if(activeBtn) activeBtn.classList.remove("active");
+  activeBtn = btn;
+  activeBtn.classList.add("active");
+
+  // stop timer if switching away from task 29
+  if(timerId && n !== 29){
+    clearInterval(timerId);
+    timerId = null; timerRunning=false;
+  }
+
+  var t = tasks[n];
+  if(!t) return;
 
   taskCard.style.display = "block";
-  taskCard.innerHTML = `
-    <div class="taskTitle">
-      Task ${n}: ${esc(t.title)}
-    </div>
-    <div class="desc">${esc(t.desc || "")}</div>
-    ${t.ui ? t.ui() : ""}
-  `;
+  taskCard.innerHTML =
+    '<div class="taskTitle">Task '+n+': '+esc(t.title)+'</div>'+
+    '<div class="desc">'+esc(t.desc||"")+'</div>'+
+    t.html() ;
 
-  // attach run button handler (delegation)
-  taskCard.onclick = (e) => {
-    const btn = e.target.closest("[data-run]");
-    if (!btn) return;
-    const key = btn.getAttribute("data-run");
-    // map data-run to task number: "t1" -> 1
-    const m = key.match(/^t(\d+)$/);
-    if (!m) return;
-    const taskNum = Number(m[1]);
-    if (tasks[taskNum] && typeof tasks[taskNum].run === "function"){
-      tasks[taskNum].run();
+  // default output
+  var out = taskCard.querySelector("[data-out]");
+  if(out) out.innerHTML = "<pre>Select inputs and click Run.</pre>";
+
+  // run button handler
+  taskCard.addEventListener("click", onTaskClick);
+  // remove old handler before re-add
+  taskCard.removeEventListener("click", onTaskClick);
+  taskCard.addEventListener("click", onTaskClick);
+
+  function onTaskClick(e){
+    var runBtn = e.target.closest("[data-run]");
+    if(!runBtn) return;
+    var num = Number(runBtn.getAttribute("data-run"));
+    if(tasks[num] && typeof tasks[num].run === "function"){
+      tasks[num].run();
     }
-  };
+  }
 
-  // specific afterRender hooks
-  if (typeof t.afterRender === "function") t.afterRender();
-
-  // clear output by default
-  const out = taskCard.querySelector("[data-out]");
-  if (out) out.innerHTML = <pre>Select inputs and click Run.</pre>;
+  // after hook
+  if(typeof t.after === "function") t.after();
 }
 
-/* ========= Task 25 helper ========= */
+/* ===== Task 25 table render ===== */
 function renderSignupTable(){
-  const wrap = taskCard.querySelector("#t25_tableWrap");
-  if (!wrap) return;
-  if (!signupRows.length){
-    wrap.innerHTML = <div class="hint">No rows yet. Add data to see table.</div>;
+  var wrap = taskCard.querySelector("#t25_tableWrap");
+  if(!wrap) return;
+  if(!signupRows.length){
+    wrap.innerHTML = '<div style="font-size:12px;color:#555">No rows yet. Add data to see table.</div>';
     return;
   }
-  const rowsHtml = signupRows.map((r,i)=>`
-    <tr>
-      <td>${i+1}</td>
-      <td>${esc(r.name)}</td>
-      <td>${esc(r.email)}</td>
-      <td>${esc(r.phone || "-")}</td>
-    </tr>
-  `).join("");
-  wrap.innerHTML = `
-    <table>
-      <thead>
-        <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th></tr>
-      </thead>
-      <tbody>${rowsHtml}</tbody>
-    </table>
-  `;
-}
-
-/* ========= Fill dropdown ========= */
-for(let i=1;i<=30;i++){
-  const opt = document.createElement("option");
-  opt.value = String(i);
-  opt.textContent = Task ${i};
-  taskSelect.appendChild(opt);
-}
-
-/* ========= Events ========= */
-taskSelect.addEventListener("change", ()=>{
-  const n = Number(taskSelect.value);
-  if (!n) {
-    taskCard.style.display = "none";
-    taskCard.innerHTML = "";
-    return;
+  var rowsHtml = "";
+  for(var i=0;i<signupRows.length;i++){
+    var r = signupRows[i];
+    rowsHtml += "<tr>"+
+      "<td>"+(i+1)+"</td>"+
+      "<td>"+esc(r.name)+"</td>"+
+      "<td>"+esc(r.email)+"</td>"+
+      "<td>"+esc(r.phone||"-")+"</td>"+
+    "</tr>";
   }
-  renderTask(n);
-});
+  wrap.innerHTML =
+    '<table>'+
+      '<thead><tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th></tr></thead>'+
+      '<tbody>'+rowsHtml+'</tbody>'+
+    '</table>';
+}
 
-$("#btnReset").addEventListener("click", ()=>{
-  // stop timer if running
-  if (timer.id) clearInterval(timer.id);
-  timer.id = null; timer.running=false; timer.remaining=0;
+/* ===== Reset all ===== */
+$("#btnReset").addEventListener("click", function(){
+  if(activeBtn) activeBtn.classList.remove("active");
+  activeBtn = null;
 
-  taskSelect.value = "";
+  // stop timer
+  if(timerId) clearInterval(timerId);
+  timerId = null; timerRunning=false; timerRemaining=0;
+
   taskCard.style.display = "none";
   taskCard.innerHTML = "";
 });
